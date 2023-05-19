@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+    padding: 0;               
+}
+.form-box{
+    width: 500px;
+    background:#E5F6DF;
+    margin: 12% auto;
+    padding: 50px 0;
+    color: black;
+    box-shadow: 0 0 20px 2px rgba(0,0,0,0.5);
+}
+h1{
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: medium;
+}
+.input-box{
+    margin: 31px auto ;
+    width: 80%;
+    border-bottom: 1px solid black;
+    padding-top: 10px;
+    padding-bottom: 5px;
+
+}
+.input-box input{
+    width: 90%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color:black;
+}
+::placeholder{
+    color: black;
+
+}
+.fa{
+    margin-right: 20px;
+}
+.eye{
+    position: absolute;
+}
+#hide1{
+    display: none;
+}
+.login-btn{
+    margin: 40px auto 20px;
+    width: 80%;
+    display: block;
+    outline: none;
+    padding: 10px 0;
+    border: 1px solid black;
+    cursor: pointer;
+    background: transparent;
+    color: black;
+    font-size: 16px;
+}
+.register h1{
+    font-size: medium;
+    text-align: center;
+    
+}
+ .register a{
+    font-size: medium;
+    text-decoration: dashed;
+    margin:17rem ;
+    position: relative;
+    bottom:32px;
+ }
+ .for a{
+    position: relative;
+    bottom:20px;
+    margin-left:15rem;
+    font-size: medium;
+ }
