@@ -3,12 +3,46 @@ const asynchandler =require("express-async-handler");
 const bcrypt =require("bcrypt");
 const jwt =require('jsonwebtoken');
 require('dotenv').config();
-
+const nodemailer=require('nodemailer');
 //import schememodel
 const Register =require('../model/schema');
-const { use } = require("../routes/login");
+//const { use } = require("../routes/login");
 const { Cookie } = require("cookie-parser");
+const user=require('../model/image')
 
+//sendverfiymail
+const sendVerfiyMail=async(name,email,user_id)=>{
+try{
+
+ const transporter = nodemailer.createTransport({
+
+    service: 'gmail',
+    auth:{
+      user:'aneshabastakoti@gmail.com',
+      pass:'teynxpicqfwqjndq'
+    }
+  });
+  const mailOption={
+    from:'aneshabastakoti@gmail.com',
+    to:email,
+    subject:'for verification mail',
+    html:'<p>hello' +name+' please click here to <a href="http://localhost:3000/verify?id='+user_id+'"> verfiy </a> your mail.</p>'
+    
+  }
+  transporter.sendMail(mailOption,function(error,info){
+    if(error){
+      console.log(error);
+    }
+    else{
+      res.flash('message',"email has been sent ",info.response);
+      res.redirect('/register');
+    }
+  })
+res.redirect('/register');
+}catch(error){
+  console.log(error.message);
+}
+}
 //for register
 const register= async(req,res)=>{
     const{name,email,password,confirmpassword}= req.body;
@@ -43,31 +77,34 @@ if (password !== confirmpassword) {
       email,
       password: hashPassword,
       confirmpassword:hashPassword,
+      is_verified:0,
   });
-
-  //generate a token
-  const token = jwt.sign(
-    {id:user._id,email:user.email}, process.env.SECRET_KEY,
-    {expiresIn:"2h"}
-  );
-  user.tokens = user.tokens.concat({token:token});
-  user.token = token
-  await user.save();
   
-
-  req.flash('message','Registration successful' );
-   return res.render('login');
+  await user.save();
+  if(user){
+     sendVerfiyMail(req.body.name, req.body.email, user._id);
+  req.flash('message', 'Registration successful. Please check your email for verification.');
+  return res.render('register', { message: req.flash('message') }); // Pass the message to the register pag
     }
-
+  }
   catch (error) {
     console.log(error);
          req.flash('message','Registration failed');
         return res.redirect('/Register');
   }
-     
-     
   };
   
+ const verfiyMail=async(req,res)=>{
+  try{
+    const updateInfo = await Register.updateOne({ _id: req.query._id }, { $set: { is_verified: true } });
+    console.log(updateInfo);
+    req.flash('message', 'Email verified. You can now log in.');
+    return res.render('login', { message: req.flash('message') }); // Pass the message to the login page
+    
+  }catch(error){
+    console.log(error);
+  }
+ }
  
 //for login
 async function login(req, res) {
@@ -76,24 +113,10 @@ async function login(req, res) {
     const userEmail = await Register.findOne({ email: email });
     if (userEmail) {
       const passwordMatch = await bcrypt.compare(password, userEmail.password);
-      const token =jwt.sign(
-        { id:userEmail._id},process.env.SECRET_KEY,
-        {
-        expiresIn :"2h"
-        }
-    );
-    userEmail.token =token;
-
-    //sending cookies
-
-    res.cookie("token",token,{
-      expiresIn: new Date(Date.now()+ 3*60*60*1000),
-      httpOnly:true
-    });
+      
     
-     
-     
-      if (passwordMatch) {
+  if (passwordMatch) {
+    req.session.user_id =userEmail._id
         return res.status(201).render('homepage');
       }
       else {
@@ -115,5 +138,8 @@ async function login(req, res) {
 
   }
 }
-  
-module.exports ={register,login};
+
+
+//for verying register
+module.exports ={register,
+  login,verfiyMail};

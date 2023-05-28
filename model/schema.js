@@ -26,7 +26,11 @@ require('dotenv').config(); // Load environment variables from .env file
         type:String,
         required:true,
     }
-}]
+}],
+   is_verified:{
+   type:String,
+   required:true
+}
         
  });
 

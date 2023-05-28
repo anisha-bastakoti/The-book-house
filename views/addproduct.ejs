@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add product</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+
+<form action="/addproduct" method="post" enctype="multipart/form-data"  class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend>PRODUCTS</legend>
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+  <div class="col-md-4">
+  <input id="product_name" name="productname" placeholder="PRODUCT NAME" class="form-control input-md" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_name_fr">PRODUCT DESCRIPTION </label>  
+  <div class="col-md-4">
+  <input id="product_name_fr" name="productname" placeholder="PRODUCT DESCRIPTION " class="form-control input-md"  type="text">
+    
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
+  <div class="col-md-4">
+    <select id="product_categorie" name="productcategorie" class="form-control">
+    </select>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="percentage_discount">PRICE</label>  
+  <div class="col-md-4">
+  <input id="percentage_discount" name="price" placeholder="PRICE" class="form-control input-md" type="text">
+    
+  </div>
+</div>
+
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="author">AUTHOR</label>  
+  <div class="col-md-4">
+  <input id="author" name="author" placeholder="AUTHOR" class="form-control input-md"  type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="enable_display">EXPIRE DATE</label>  
+  <div class="col-md-4">
+  <input id="enable_display" name="expiredate" placeholder="EXPIREDATE" class="form-control input-md" type="text">
+    
+  </div>
+</div>
+
+ <!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="filebutton">main_image</label>
+  <div class="col-md-4">
+    <input id="filebutton" name="image" class="input-file" type="file">
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="singlebutton">Single Button</label>
+  <div class="col-md-4">
+    <button id="singlebutton" name="singlebutton" class="btn btn-primary">Button</button>
+  </div>
+  </div>
+  <div class="alert alert-success">
+    <% if (typeof message !=' undefined' && message.length > 0) { %>
+      <div>
+        <%= message %>
+      </div>
+    <% } %>
+  </div>
+
+</fieldset>
+</form>
+
+</body>
+</html>

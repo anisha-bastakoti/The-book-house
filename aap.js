@@ -5,9 +5,9 @@ const morgan =require('morgan');
 const cookieParser = require('cookie-parser');
 const session =require("express-session");
 const flash =require('connect-flash');
- require("./controller/usercontroller");
+const multer=require('multer')
  require('dotenv').config();
- const authisLoggedIn=require("./controller/auth");
+ //const authisLoggedIn=require("./controller/auth");
  
 
 //database connection 
@@ -35,14 +35,17 @@ app.use(function(req,res,next){
 res.locals.message =req.flash('message');
 next();
 });
-//app.get('/Register', (req, res) => {
-  //res.send(req.flash('message'));
-//});
 
+//for user details
+app.use(function(req,res,next){
+  res.locals.user=req.user;
+  next();
+})
 
 //set path
 app.use(express.static('public'));
 app.use('/', express.static(__dirname + "/public/" + '/images'));
+app.use('/', express.static(__dirname + "/public/" + '/upload'));
 
 //register and login page routes
 app.get('/',(req,res)=>{
@@ -55,32 +58,28 @@ app.get('/login',(req,res)=>{
 app.get('/Register',(req,res)=>{
     res.render('register');
 });
- app.get('/sellerAccount',authisLoggedIn,async(req,res)=>{
+ app.get('/sellerAccount',(req,res)=>{
       res.render('sellerAccount');
       
 });
-app.get('/logout',authisLoggedIn,async(req,res)=>{
-try{
-  res.clearCookie("jwt");
-console.log("logout sucessfully");
- await req.user.save();
- res.render('login');
-}catch(error){
-res.status(500).send(error);
-}
+app.get('/addproduct',(req,res)=>{
+  res.render('addproduct');
+  
 });
+app.get('/userprofile',(req,res)=>{
+  res.render('userprofile');
+  
+});
+
 //for middleware
 app.use(morgan('tiny'));
 
+//getting user detail
+
 //routes
-const loginRoute= require('./routes/login');
-app.use('/login',loginRoute);
-const RegRoute= require('./routes/register');
-app.use('/Register',RegRoute);
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
-const sellerRotue= require('./routes/sellerAccount');
-app.use('/sellerAccount',sellerRotue);
+
 
 
 
