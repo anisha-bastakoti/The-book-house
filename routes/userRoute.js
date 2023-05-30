@@ -3,7 +3,6 @@ const userController = require("../controller/usercontroller");
 const productController=require('../controller/product');
 const userRouter =express.Router();
 const imageSchema = require('../model/image');
-const product=require('../model/userproduct')
 const session =require('express-session');
 const config =require("../config/config"); 
 userRouter.use(session({secret:config.sessionSceret,
@@ -11,18 +10,21 @@ resave:false,
 saveUninitialized:false}));
 
 const auth=require('../middelware/auth');
+//userRouter.get('/shopnow',productController.displayproduct);
+//userRouter.post('/shopnow',productController.displayproduct);
 
 userRouter.get('/verify',userController.verfiyMail);
 userRouter.get('/Register',userController.register);
 userRouter.post('/Register',userController.register);
 userRouter.get('/login',userController.login);
 userRouter.post('/login',userController.login);
-userRouter.get('/addproduct',productController.getProduct);
+//userRouter.get('/addproduct',productController.getProduct);
 
 //upload image 
 userRouter.use( express.static('public'));
 const multer=require('multer');
 const user = require("../model/image");
+const userproduct = require("../model/userproduct");
 const fileStorageEngine =multer.diskStorage({
   destination:(req,file,cb)=>{
   cb(null,'public/upload/')
@@ -69,7 +71,7 @@ catch(error){
   console.log(error);
 }
 });
-userRouter.post('/addproduct',upload.single('image'),productController.postProduct);
+//userRouter.post('/addproduct',upload.single('image'),productController.postProduct);
 
 
  

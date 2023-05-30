@@ -1,41 +1,44 @@
+
 const product=require('../model/userproduct');
 const getProduct = async(req,res)=>{
 res.render('addproduct')
 };
 
-const postProduct=async(req,res)=>{
-    console.log(req.file);
-    try{
-      if (!req.body.productname || !req.body.expiredate|| !req.body.author|| !req.file
-          ||!req.body.price||!req.body.productdescription) {
-          req.flash('message', 'Please fill in all the fields.');
-          return res.redirect('/addproduct');
-        
-        }
-        const newProduct= new product({
-          productname:req.body.productname,
-          expiredate: req.body.expiredate,
-          author:req.body.author,
-          image: 
-          {
-            data:req.file.buffer,
-            //data: Buffer.from(req.file.buffer),
-            contentType:req.file.mimetype,
-          },
-          productdescription:req.body.productdescription,
-          price:req.body.price,
-          productcategori:req.body.productcategori
-      });
-      await newProduct.save();
-      console.log(newProduct.findAll());
-      res.send('sucesfully');
-      next();
-      }
-      catch(error){
-        console.log(error);
-      }
-  };
+const postProduct=(req,res)=>{
+  const productname =req.body.productname;
+  const productdescription=req.body.productdescription;
+  const price= req.body.price;
+  const author=req.body.author;
+  const expiredate=req.body.expiredate;
+  const image=req.body.image;
+ 
+  const prod = new product(productname,productdescription,price,author,expiredate,image)
 
- module.exports={
-    getProduct,postProduct
- }
+  prod.save();
+  const products =product.find({});
+
+ res.setHeader('Cache-Control', 'no-store');
+      res.status(201).render('shopnow',{
+        sucess:true,
+        products,
+      
+      });
+console.log(products)
+}
+ //display product
+const displayProduct=(req,res)=>{
+   const products =product.find({});
+   res.setHeader('Cache-Control', 'no-store');
+      res.status(201).render('shopnow',{
+        sucess:true,
+        products,
+      
+    })
+    console.log(products[0]); // Output: waiwai
+//console.log(products[0].price); // Output: waiwai is a noodles
+//console.log(products[0].expiredate); // Output: me
+
+};
+module.exports={
+  getProduct,postProduct,displayProduct
+}

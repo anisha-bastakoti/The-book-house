@@ -70,6 +70,10 @@ app.get('/userprofile',(req,res)=>{
   res.render('userprofile');
   
 });
+app.get('/shopnow',(req,res)=>{
+  res.render('shopnow');
+  
+});
 
 //for middleware
 app.use(morgan('tiny'));
@@ -77,6 +81,9 @@ app.use(morgan('tiny'));
 //getting user detail
 
 //routes
+const productRoute =require('./routes/productitem');
+app.use('/',productRoute);
+
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
 
