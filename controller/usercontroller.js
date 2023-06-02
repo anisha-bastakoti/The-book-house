@@ -9,7 +9,7 @@ const Register =require('../model/schema');
 //const { use } = require("../routes/login");
 const { Cookie } = require("cookie-parser");
 const user=require('../model/image')
-
+const sendToken=require('../middelware/sendToken')
 //sendverfiymail
 const sendVerfiyMail=async(name,email,user_id)=>{
 try{
@@ -38,6 +38,7 @@ try{
       res.redirect('/register');
     }
   })
+  
 res.redirect('/register');
 }catch(error){
   console.log(error.message);
@@ -79,19 +80,21 @@ if (password !== confirmpassword) {
       confirmpassword:hashPassword,
       is_verified:0,
   });
-  
+
   await user.save();
   if(user){
      sendVerfiyMail(req.body.name, req.body.email, user._id);
   req.flash('message', 'Registration successful. Please check your email for verification.');
   return res.render('register', { message: req.flash('message') }); // Pass the message to the register pag
     }
+    sendToken(user, 201, res);
   }
   catch (error) {
     console.log(error);
          req.flash('message','Registration failed');
         return res.redirect('/Register');
   }
+  
   };
   
  const verfiyMail=async(req,res)=>{
@@ -116,7 +119,7 @@ async function login(req, res) {
       
     
   if (passwordMatch) {
-    req.session.user_id =userEmail._id
+    sendToken(user, 201, res);
         return res.status(201).render('homepage');
       }
       else {

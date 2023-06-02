@@ -1,0 +1,40 @@
+
+body {
+    font-family: Arial, sans-serif;
+    display:contents;
+    justify-content:inherit;
+    align-items:inline;
+    height: 100vh;
+    margin: 0; 
+
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    max-width: 700px;
+    width: 100%;
+    padding: 20px;
+    background-color:#E5F6DF;;
+    border-radius: 5px;
+    margin-left:29ch;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

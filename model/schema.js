@@ -1,5 +1,7 @@
 const mongoose =require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); 
+// Load environment variables from .env file
+const jwt =require('jsonwebtoken')
 //define schema
  const RegisterSchema = new mongoose.Schema({
     name:{
@@ -25,7 +27,7 @@ require('dotenv').config(); // Load environment variables from .env file
        token:{
         type:String,
         required:true,
-    }
+    },
 }],
    is_verified:{
    type:String,
@@ -33,6 +35,13 @@ require('dotenv').config(); // Load environment variables from .env file
 }
         
  });
+ 
+ RegisterSchema.methods.getJwtToken = function () {
+    return jwt.sign({ id: this._id },'ertyb667ee4tv', {
+      expiresIn: '5d',
+    });
+  };
+  
 
  
  //we need to create collection 

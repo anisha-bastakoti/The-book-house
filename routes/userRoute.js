@@ -1,6 +1,6 @@
 const express = require("express");
 const userController = require("../controller/usercontroller");
-const productController=require('../controller/product');
+//const productController=require('../controller/product');
 const userRouter =express.Router();
 const imageSchema = require('../model/image');
 const session =require('express-session');
@@ -24,7 +24,7 @@ userRouter.post('/login',userController.login);
 userRouter.use( express.static('public'));
 const multer=require('multer');
 const user = require("../model/image");
-const userproduct = require("../model/userproduct");
+//const userproduct = require("../model/userproduct");
 const fileStorageEngine =multer.diskStorage({
   destination:(req,file,cb)=>{
   cb(null,'public/upload/')
@@ -58,7 +58,7 @@ try{
     {
       data:req.file.buffer,
       //data: Buffer.from(req.file.buffer),
-      contentType:req.file.mimetype,
+      //contentType:req.file.mimetype,
     },
     email:req.body.email,
     password:req.body.password

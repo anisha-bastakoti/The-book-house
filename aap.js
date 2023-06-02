@@ -81,13 +81,13 @@ app.use(morgan('tiny'));
 //getting user detail
 
 //routes
-const productRoute =require('./routes/productitem');
-app.use('/',productRoute);
 
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
-
-
+ const catRoute=require('./routes/categoryroute');
+ app.use('/',catRoute)
+const productroute=require('./routes/productRoute');
+app.use('/',productroute);
 
 
 
