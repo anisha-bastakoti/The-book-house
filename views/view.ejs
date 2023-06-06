@@ -1,0 +1,116 @@
+<%- include('./partial/meta'); %>
+<%- include('./partial/css') %>
+<body>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          background-color: #E5F6DF; /* Replace #ffffff with your desired background color */
+        }
+      </style>
+     <header>
+      <div class="product-container">
+        <div class="col">
+          <img src="/productImage/<%=data.image%>" alt="Product Image" class="img-fluid">
+        </div>
+        <div class="col">
+          <p class="price">Price: <%= data.price %></p>
+        </div>
+      </div>
+      
+            </header>
+            <main>
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                      <div class="user-details">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-3">
+                              <div class="avatar">
+                                <img src="/upload/<%=datas.image %>" alt="User Avatar" class="rounded-circle">
+                              </div>
+                            </div>
+                            <div class="col-9">
+                              <div class="user-info">
+                                <a class="user-profile"style="color: black; text-decoration: none;"href="/userprofile">Userprofile</a>
+                                <p class="user-name"><%=datas.name %></p>
+                                <p class="user-email"><%= datas.email %></p>
+                                <p class="user-phone"><%= datas.phone %></p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <div class="product-info">
+                        <h2><%= data.name %></h2>
+                        <!-- Product description goes here -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Rest of the content -->
+                </div>
+                <div class="row">
+                    <div class="col">
+                      <div class="product-info">
+                        <div class="product-buttons">
+                          <a href="#" class="btn-link" id="descriptionBtn">Description</a>
+                          <a href="#" class="btn-link" id="commentBtn">Comment</a>
+                        </div>
+                        <div class="product-description" id="descriptionSection">
+                          <h3>General</h3>
+                          <ul>
+                            <li>Location:<%= data.location %></li>
+                            <li>Delivery:<%= data.delivery %></li>
+                            <li>Expires:<%= data. expiredate%></li>
+                            <li>Author:<%=data.author%></li>
+                          </ul>
+                        </div>
+                        <div class="comment-section" id="commentSection">
+                            <h3>User Comment</h3>
+                            <div id="commentContent"></div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+            <footer>
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <button class="btn ">Save</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn ">Chat Now</button>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+          </body>
+          </html>
+    </form>
+</body>
+<script>
+const descriptionBtn = document.getElementById('descriptionBtn');
+const commentBtn = document.getElementById('commentBtn');
+const descriptionSection = document.getElementById('descriptionSection');
+const commentSection = document.getElementById('commentSection');
+const commentContent = document.getElementById('commentContent');
+
+descriptionBtn.addEventListener('click', () => {
+  descriptionSection.classList.add('show');
+  commentSection.classList.remove('show');
+});
+
+commentBtn.addEventListener('click', () => {
+  descriptionSection.classList.remove('show');
+  commentSection.classList.add('show');
+  commentContent.innerText = 'This is a comment from the user.';
+});
+</script>

@@ -14,9 +14,7 @@ var imageSchema = new mongoose.Schema({
     minLength: [8, "password should have 8 characters"],
   },
     image:{ 
-      data: Buffer,
-        contentType: String,
-        
+      type:String,  
     },
     email:{
       type:String,
@@ -25,6 +23,38 @@ var imageSchema = new mongoose.Schema({
     password:{
       type:String,
       required:true
-    }
+    },
+    ratings: {
+      type: Number,
+      default: 0,
+    },numOfReview: {
+      type: Number,
+      default: 0,
+    },
+  
+    reviews: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+   
+  
+  
   });//Export the model
   module.exports = mongoose.model("image",imageSchema);

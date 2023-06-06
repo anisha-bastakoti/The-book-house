@@ -1,9 +1,13 @@
 const Product=require('../model/productModel');
-  const categoryController=require('../controller/categoryController');
-  //const Category=require('../model/catagory');
+const NameController=require('../controller/nameController');
+const Seller=require('../model/image');
+const image = require('../model/image');
 const add_product=async(req,res)=>{
-    try {
-        const product = new Product({
+    try { 
+      const seller = await Seller.findOne();
+    if (seller) {
+      const sellerId = seller._id;
+       const product = new Product({
           name: req.body.name,
           pdescription: req.body.pdescription,
           category:req.body.category,
@@ -13,14 +17,12 @@ const add_product=async(req,res)=>{
           price: req.body.price,
           expiredate: req.body.expiredate,
           image: req.file.filename,
+          seller_id:sellerId,
         });
-await product.save();
- const products =await Product.find();
-res.status(200).render('products',{msg:'product details',
-      data:products});
-      //console.log(products[0].name);
-      
-
+ const products = await product.save();
+ res.redirect('/products',200,{ data:products})
+  
+      } 
   }catch(error){
     res.status(400).send({sucess:false,msg:error.message});
   }
@@ -30,94 +32,83 @@ res.status(200).render('products',{msg:'product details',
     try{
         // Fetch all products from the database
         const products = await Product.find()
-        .select('name pdescription location author delivery price expiredate image');
+        .select('name price image');
      // Return the products as a response
-    res.status(200).json({ success: true, data: products,});
+    res.render('products',{ success: true, data: products,});
 
     }catch(error){
         res.status(400).send({sucess:false,msg:error.message});
     }
  }
 
-//getting product catergory wise
-const getProduct = async (req, res) => {
-    try {
-      const sendData = [];
-      const catData = await categoryController.getCategory();
-      if (catData.length > 0) {
-        for (let i = 0; i < catData.length; i++) {
-          const productData = [];
-          const catId = catData[i]['_id'].toString();
-          const catPro = await Product.find({ category_id: catId });
-          if (catPro.length > 0) {
-            for (let j = 0; j < catPro.length; j++) {
-              productData.push({
-                prodductname: catPro[j]['name'],
-                image: catPro[j]['image'],
-                description: catPro[j]['pdescription'],
-                location: catPro[j]['location'],
-                author: catPro[j]['author'],
-                delivery: catPro[j]['delivery'],
-                price: catPro[j]['price'],
-                expiredate: catPro[j]['expiredate'],
-              });
-            }
-          }
-          sendData.push({
-            category: catData[i]['category'],
-            product: productData,
-          });
-        }
-  
-        if (sendData.length > 0) {
-          return res
-            .status(200)
-            .send({ success: true, message: 'product detail', data: sendData });
-        } else {
-          return res
-            .status(200)
-            .send({ success: false, message: 'No products found', data: sendData });
-        }
-      } else {
-        return res
-          .status(200)
-          .send({ success: false, message: 'No categories found', data: sendData });
-      }
-    } catch (error) {
-      console.log(error);
-      return res.status(400).send({ success: false, msg: error.message });
-    }
-  };
-
-  // Update Product 
-const updateProduct = (async (req, res) => {
-    try{
-    let product = await Product.findById(req.params.id);
+ //get single product
+ 
+ const singleProduct=async(req,res)=>{
+  try {
+    const productId = await req.params._id.replace(':', '');
+    const product = await Product.findOne({_id:productId});
+    console.log(product);
     if (!product) {
-      return next(new Error("Product not Found", 404));
+      return res.status(404).send({ success: false, msg: 'Product not found' });
     }
-  
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true.valueOf,
-      useFindAndModify: false,
-    });
-  
-   return res.json({
-      success: true,
-      product,
-    });
-}catch(error){
-    return res.status(400).send({ success: false, msg: error.message });
+    // Access the seller details
+    const sellerId = product.seller_id;
+    const seller =await image.findOne({_id:sellerId});
+    console.log(seller);
+     console.log(productId);
+     res.render('view',{success:true,msg:"product found",data:product,datas:seller})
+  }catch(error){
+    console.log(error);
+  }
+};
+ const updateProduct = async (req, res) => {
+  try {
+    let id = req.params._id;
+    const product = await Product.findById(id); // Add 'await' to wait for the asynchronous operation to complete
+
+    if (product != null) { // Check if the product exists
+      product.name = req.body.name;
+      product.pdescription = req.body.pdescription;
+      product.location = req.body.location;
+      product.author = req.body.author;
+      product.delivery = req.body.delivery;
+      product.price = req.body.price;
+      product.expiredate = req.body.expiredate;
+      product.image = req.body.image;
+      // Add more properties as needed
+
+      console.log("Updated product:", product);
+
+      // Save the updated product
+      await product.save();
+      console.log(product);
+
+      res.status(200).send({ success: true, msg: "Product updated successfully", product });
+    } else {
+      res.status(404).send({ success: false, msg: "Product not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
 }
-  });
+ 
+ const deleteProduct=async(req,res)=>{
+  try{
+
+  }catch(error){
+    console.log(error);
+  }
+ }
   
   module.exports = {
     add_product,
-    getProduct,
     getProductDetail,
-    updateProduct
+    updateProduct,deleteProduct,singleProduct
   };
+
+
+
 // const getProduct=async(req,res)=>{
 //  try{
 //        var sendData=[];

@@ -27,6 +27,9 @@ app.use(session({
   secret:'secret',
   resave:false,
   saveUninitialized:false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
+  },
 }));
 app.use(flash());
 
@@ -70,10 +73,7 @@ app.get('/userprofile',(req,res)=>{
   res.render('userprofile');
   
 });
-app.get('/shopnow',(req,res)=>{
-  res.render('shopnow');
-  
-});
+
 
 //for middleware
 app.use(morgan('tiny'));
@@ -84,10 +84,10 @@ app.use(morgan('tiny'));
 
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
- const catRoute=require('./routes/categoryroute');
- app.use('/',catRoute)
+
 const productroute=require('./routes/productRoute');
 app.use('/',productroute);
+
 
 
 

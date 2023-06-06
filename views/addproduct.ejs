@@ -15,7 +15,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category">Category:</label>
-                        <select id="category" name="category" onchange="redirectToCategoryModel()"></select>
+                        <select id="category" name="category"></select>
                         <select class="form-control" name="category" id="category" required>
                             <option value="">Select a category</option>
                             <option value="category1">Spiritual</option>
@@ -59,13 +59,5 @@
                     <input type="submit" class="btn btn-primary" value="Add Product">
                 </form>
             </div>
-            <script>
-                function redirectToCategoryModel() {
-          var selectedCategory = document.getElementById("category").value;
-       if (selectedCategory) {
-        window.location.href = "/category?category=" + selectedCategory;
-       }
-      } 
-            </script>
         </body>
     

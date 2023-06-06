@@ -1,61 +1,44 @@
 <%-include('./partial/meta');-%>
 <%-include('./partial/css'); -%>
-<body>
+<form action="/register" method="POST">
+   
     <div class="form-box">
-        <h1>Register</h1>
-        <form action="/Register" method="POST">
-            <div class="input-box">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            <input  type ="text" name="name" placeholder="Full name">
-        </div>
-        <div class="input-box">
-            <i class="fa-regular fa-envelope"></i>
-        <input  type ="text" name="email" placeholder="Email Id">
-    </div>
-    <div class="input-box">
-        <i class="fa-sharp fa-solid fa-key"></i>
-    <input type="text" name="password" placeholder="password" id="myInput">
-    <span class="eye" onclick="myFunction()">
-    <i  id="hide1" class="fa fa-eye"></i>
-    <i  id="hide2" class="fa fa-eye-slash"></i>
-</span>
-</div>
-<div class="input-box">
-    <i class="fa-sharp fa-solid fa-key"></i>
-<input type="text" name="confirmpassword" placeholder="confirmpassword" id="myInput">
-<span class="eye" onclick="myFunction()">
-<i  id="hide1" class="fa fa-eye"></i>
-<i  id="hide2" class="fa fa-eye-slash"></i>
-</span>
-</div>
-<button type="summit " class="login-btn"> Register</button>
-
-</form>
-<div class="alert alert-success">
-    <% if (typeof message !=' undefined' && message.length > 0) { %>
-      <div>
-        <%= message %>
+      <h1>Register</h1>
+      <div class="input-box">
+        <label for="name">
+          <i class="fa fa-user" aria-hidden="true"></i>
+        </label>
+        <input type="text" id="name" name="name" placeholder="Full name">
       </div>
-    <% } %>
-  </div>
-<script>
-    function myFunction(){
-          var x = document.getElementById("myInput");
-          var y = document.getElementById("hide1");
-          var z = document.getElementById("hide2");
-          if(x.type === 'password'){
-              x.type ="text";
-              y.style.display = "block";
-              z.style.display = "none";
-          }
-      
-          else{
-              x.type ="password";
-              y.style.display = "none";
-              z.style.display = "block";
-          
-
-          }
-          }
-  </script>
-</body>
+      <div class="input-box">
+        <label for="email">
+          <i class="fa-regular fa-envelope"></i>
+        </label>
+        <input type="text" id="email" name="email" placeholder="Email Id">
+      </div>
+      <div class="input-box">
+        <label for="password">
+          <i class="fa-sharp fa-solid fa-key"></i>
+        </label>
+        <input type="password" id="password" name="password" placeholder="Password">
+        
+      </div>
+      <div class="input-box">
+        <label for="confirm-password">
+          <i class="fa-sharp fa-solid fa-key"></i>
+        </label>
+        <input type="password" id="confirm-password" name="confirmpassword"
+         placeholder="Confirm Password">
+         
+      </div>
+      <button type="submit" class="login-btn">Register</button>
+      <div class="alert ">
+        <% if(typeof message !='undefined' && message.length > 0) { %>
+          <div>
+            <%= message %>
+          </div>
+        <% } %>
+    </div>
+  </form>
+  
+  

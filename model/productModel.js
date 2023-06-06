@@ -28,6 +28,9 @@ const productSchema=mongoose.Schema({
         type:Number,
         default:0
     },
+    seller_id: {
+        type:mongoose.Schema.Types.ObjectId,
+    },
     expiredate:{
         type:Date,
         required:true
@@ -35,6 +38,7 @@ const productSchema=mongoose.Schema({
     image:{
         type:String,
         required:true
-    }
+    },
+ 
 });
 module.exports=mongoose.model('Product',productSchema);

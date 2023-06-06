@@ -1,10 +1,11 @@
+
 *{
     margin: 0;
     padding: 0;               
 }
 .form-box{
     width: 500px;
-    background:#E5F6DF;
+    background:white;
     margin: 12% auto;
     padding: 50px 0;
     color: black;
@@ -63,13 +64,11 @@ h1{
  .register a{
     font-size: medium;
     text-decoration: dashed;
-    margin:17rem ;
+    margin:20rem ;
     position: relative;
-    bottom:32px;
+    bottom:3px;
  }
- .for a{
-    position: relative;
-    bottom:20px;
-    margin-left:15rem;
-    font-size: medium;
+ .forget a{
+    text-align: center;
  }
+

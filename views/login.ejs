@@ -1,55 +1,56 @@
 <%-include('./partial/meta');-%>
 <%-include('./partial/css'); -%>
+
 <body>
+  <form action="/login" method="POST">
     <div class="form-box">
-        <h1>login here</h1>
-        <form action="/login" method="POST">
-        <div class="input-box">
-            <i class="fa-regular fa-envelope"></i>
-        <input  type ="text" name="email" placeholder="Email Id">
-    </div>
-    <div class="input-box">
-        <i class="fa-sharp fa-solid fa-key"></i>
-    <input type="text" name="password" placeholder="password" id="myInput">
-    <span class="eye" onclick="myFunction()">
-    <i  id="hide1" class="fa fa-eye"></i>
-    <i  id="hide2" class="fa fa-eye-slash"></i>
-</span>
-</div>
-<button type="summit " class="login-btn"> LOGIN</button>
- <div class="register"> 
-    <h1> Don't you have an account?</h1> <a href= "./register"> Register</a>
- </div>
-
-</form>
-<div class="for">
-    <span><a href="#"> Forget Password </a></span>
- </div>
- <div class="alert alert-success">
-    <% if(typeof message !='undefined' && message.length > 0) { %>
-      <div>
-        <%= message %>
+      <h1>login here</h1>
+      <div class="alert ">
+        <% if(typeof message !='undefined' && message.length > 0) { %>
+        <div>
+          <%= message %>
+        </div>
+        <% } %>
       </div>
-    <% } %>
-  </div>
-<script>
-    function myFunction(){
-          var x = document.getElementById("myInput");
-          var y = document.getElementById("hide1");
-          var z = document.getElementById("hide2");
-          if(x.type === 'password'){
-              x.type ="text";
-              y.style.display = "block";
-              z.style.display = "none";
-          }
-      
-          else{
-              x.type ="password";
-              y.style.display = "none";
-              z.style.display = "block";
-          
-
-          }
-          }
+      <div class="input-box">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="text" name="email" placeholder="Email Id">
+      </div>
+      <div class="input-box">
+        <i class="fa-sharp fa-solid fa-key"></i>
+        <input type="password" name="password" placeholder="Password" id="myInput">
+        <span class="eye" onclick="togglePasswordVisibility('myInput')">
+          <i id="hide1" class="fa fa-eye"></i>
+          <i id="hide2" class="fa fa-eye-slash"></i>
+        </span>
+      </div>
+      <button type="submit" class="login-btn">LOGIN</button>
+      <div class="register"> 
+        <h1>Don't you have an account?</h1>
+        <a href="./register">Register</a>
+      </div>
+    </div class="forget">
+        <a href=" ">Forget password</a>
+      </div>
+    </div>
+  </form>
+  
+  
+  
+  <script>
+    function togglePasswordVisibility(inputId) {
+      var x = document.getElementById(inputId);
+      var y = document.getElementById("hide1");
+      var z = document.getElementById("hide2");
+      if (x.type === 'password') {
+        x.type = "text";
+        y.style.display = "block";
+        z.style.display = "none";
+      } else {
+        x.type = "password";
+        y.style.display = "none";
+        z.style.display = "block";
+      }
+    }
   </script>
 </body>

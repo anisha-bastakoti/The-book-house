@@ -10,6 +10,7 @@ const Register =require('../model/schema');
 const { Cookie } = require("cookie-parser");
 const user=require('../model/image')
 const sendToken=require('../middelware/sendToken')
+const imageSchema=require('../model/image');
 //sendverfiymail
 const sendVerfiyMail=async(name,email,user_id)=>{
 try{
@@ -51,23 +52,23 @@ const register= async(req,res)=>{
  //checking all fields are filled out
     if (!name || !email || !password || !confirmpassword) {
       req.flash('message', 'All fields are required');
-      return res.redirect('/Register');
+      return res.redirect('/register');
       }
     try{
     const userAvailable = await Register.findOne({email});
  if(userAvailable){
    req.flash('message',"Already exist user");
-   return res.redirect('/Register');
+   return res.redirect('/register');
 }
 //checking invalid email
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(email)) {
   req.flash('message', 'Invalid email format');
-   return res.redirect('/Register');
+   return res.redirect('/register');
 }
 if (password !== confirmpassword) {
     req.flash('message','Passwords do not match' );
-   return res.redirect('/Register');
+   return res.redirect('/register');
     }
   //creating hashpassword
   const hashPassword = await bcrypt.hash(password,10);
@@ -92,7 +93,7 @@ if (password !== confirmpassword) {
   catch (error) {
     console.log(error);
          req.flash('message','Registration failed');
-        return res.redirect('/Register');
+        return res.redirect('/register');
   }
   
   };
@@ -141,8 +142,129 @@ async function login(req, res) {
 
   }
 }
+const displayUser=async(req,res)=>{
+    try{
+      
+      // Fetch all products from the database
+     await imageSchema.find();
+     const users = global.usersData;
+     //const users = req.session.users;
+  
+   // Return the products as a response
+  res.render('userprofile',{ success: true, data:users});
 
+  }catch(error){
+      res.status(400).send({sucess:false,msg:error.message});
+  }
+};
+  
+// Add reviews and ratings for Products
+const createProductReviews = (async (req, res, next) => {
+  const { rating, comment, userId } = req.body;
+try{
+  const review = {
+    user: req.user._id,//sodhchu hai paxi 
+    name: req.user.name,
+    rating: Number(rating),
+    comment
+  };
 
+  const userreview = await imageSchema.findById(userId);
+
+  const isReviewed = userreview.reviews.find(
+    (rev) => rev.user.toString() == req.user._id.toString()
+  );
+  if (isReviewed) {
+    userreview.reviews.forEach((rev) => {
+      if (rev.user.toString() == req.user._id.toString()) 
+        (rev.rating = rating),
+        (rev.comment = comment)
+    });
+
+  } else {
+    userreview.reviews.push(review);
+    userreview.numOfReview = userreview.reviews.length
+  }
+  
+   
+  let avg = 0;
+   userreview.reviews.forEach(rev =>{
+    avg = avg + rev.rating
+  })
+ 
+ userreview.ratings = avg / product.reviews.length
+ userreview.save({validateBeforeSave:false})
+
+ res.status(200).json({
+  success: true,
+ });
+ }catch(error){
+console.log(error);
+ }
+ })
+ 
+
+// get all reviews 
+const getAllReviews = (async(req, res, next)=>{
+try{
+  const userreview = await imageSchema.findById(req.query.id)
+
+  if(!userreview){
+    return next(new Error("Product not Found", 404));
+  }
+ 
+  res.status(200).json({
+    success:true,
+    reviews:userreview.review })
+
+}catch(error){
+  console.log(error);
+}
+});
+
+// Delete reviews
+
+const deleteReview = (async(req, res, next)=>{
+  try{
+ const userreview= await imageSchema.findById(req.query.userId)
+
+ if(!userreview){
+  return next(new Error("Product not found"))
+ }
+
+ const reviews = userreview.reviews.filter((rev)=> rev._id.toString() !== req.query.id.toString());
+ let avg = 0;
+   reviews.forEach(rev =>{
+    avg = avg + rev.rating
+  })
+  let  ratings = 0;
+  if(reviews.length === 0 ){
+      ratings = 0
+  }else{
+    ratings = avg / userreview.reviews.length
+
+  }
+
+  const numOfReview = reviews.length
+  await imageSchema.findByIdAndUpdate(req.query.productId,{
+    reviews,
+    ratings,
+    numOfReview,
+  },
+  {
+    new:true,
+    runValidators:true,
+    useFindAndModify:true
+  }) 
+  res.status(200).json({
+    success:true,
+    message:"Review deleted Successfully"
+   })
+  }catch(error){
+    console.log(error);
+  }
+  })
 //for verying register
 module.exports ={register,
-  login,verfiyMail};
+  login,verfiyMail,displayUser,
+  deleteReview,getAllReviews,createProductReviews};

@@ -1,53 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
     <%-include('./partial/meta');-%>
     <%-include('./partial/css'); -%>
-</head>
+
 <body>
-   
-    <div class="form-box">
-        <h1>create an account </h1>
-        <div class="alert alert-success">
-            <% if (typeof message !=' undefined' && message.length > 0) { %>
-              <div>
-                <%= message %>
-              </div>
-            <% } %>
-          </div>
-        <form action="/selleraccount" enctype="multipart/form-data" method="post">
-            <div class="input-box">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            <input  type ="text" name="name"   placeholder="Full name">
+    <form action="/selleraccount" enctype="multipart/form-data" method="post">
+      <div class="form-box">
+        <h1>Create an account</h1>
+        <div class="alert ">
+          <% if (typeof message != 'undefined' && message.length > 0) { %>
+            <div>
+              <%= message %>
+            </div>
+          <% } %>
         </div>
+  
         <div class="input-box">
-            <i class="fa fa-phone" aria-hidden="true"></i>
-        <input  type ="text" name="phone" placeholder="phone ">
-
-    </div> 
-    <div class="input-box">
-
-        <i class="fa fa-map-marker" aria-hidden="true"></i>
-    <input type="text" name="location"   placeholder="location" id="myInput">
-</div>
-<div class="input-box">
-    <i class="fa-regular fa-envelope"></i>
-<input  type ="text" name="email" placeholder="Email Id">
-</div>
-<div class="input-box">
-    <i class="fa-sharp fa-solid fa-key"></i>
-<input type="text" name="password" placeholder="password" id="myInput">
-</div>
-<div class="input-box">
-     <label class="form-label" for="customFile">upload an image </label>
-<input type="file"  name="image" id="customFile" />
-</div>
-<button type="submit " class="login-btn"> submit</button>
-
-
-</body>
-</html>
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <input type="text" name="name" placeholder="Full name">
+        </div>
+  
+        <div class="input-box">
+          <i class="fa fa-phone" aria-hidden="true"></i>
+          <input type="text" name="phone" placeholder="Phone">
+        </div>
+  
+        <div class="input-box">
+          <i class="fa fa-map-marker" aria-hidden="true"></i>
+          <input type="text" name="location" placeholder="Location">
+        </div>
+  
+        <div class="input-box">
+          <i class="fa-regular fa-envelope"></i>
+          <input type="text" name="email" placeholder="Email Id">
+        </div>
+  
+        <div class="input-box">
+          <i class="fa-sharp fa-solid fa-key"></i>
+          <input type="password" name="password" placeholder="Password">
+        </div>
+  
+        <div class="input-box">
+          <label class="form-label" for="customFile">Upload an image</label>
+          <input type="file" name="image" id="customFile" />
+        </div>
+  
+        <button type="submit" class="login-btn">Submit</button>
+      </div>
+    </form>
+  </body>
