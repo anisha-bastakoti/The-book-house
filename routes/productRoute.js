@@ -1,6 +1,6 @@
 const express=require('express');
 const productRoute=express.Router();
-
+const {isAuthenticated}=require('../middelware/auth');
 const bodyparser=require('body-parser');
 productRoute.use(bodyparser.json());
 productRoute.use(bodyparser.urlencoded({extended:false}));
@@ -32,10 +32,10 @@ const upload=multer({storage:storage});
 
 const productController=require('../controller/productController');
 productRoute.post('/addproduct',upload.single('image'),productController.add_product);
-//productRoute.get('/view/id',productController.getProduct);
-productRoute.get('/products',productController.getProductDetail);
-productRoute.put('/products/id',productController.updateProduct);
-productRoute.delete('/products',productController.deleteProduct);
-productRoute.get('/products/:_id',productController.singleProduct);
+productRoute.get('/products', productController.getProductDetail);
+productRoute.put('/products/:_id',productController.updateProduct);
+productRoute.delete('/products/:_id',isAuthenticated ,productController.deleteProduct);
+productRoute.get('/products/:_id' ,productController.singleProduct);
+productRoute.get('/search-product',productController. searchProduct);
 
 module.exports=productRoute;

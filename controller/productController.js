@@ -63,18 +63,20 @@ const add_product=async(req,res)=>{
 };
  const updateProduct = async (req, res) => {
   try {
-    let id = req.params._id;
+    let id = req.params._id.replace(':', '');
     const product = await Product.findById(id); // Add 'await' to wait for the asynchronous operation to complete
 
-    if (product != null) { // Check if the product exists
-      product.name = req.body.name;
-      product.pdescription = req.body.pdescription;
-      product.location = req.body.location;
-      product.author = req.body.author;
-      product.delivery = req.body.delivery;
-      product.price = req.body.price;
-      product.expiredate = req.body.expiredate;
-      product.image = req.body.image;
+    if (product != null) { 
+      // Check if the product exists
+      product.name=req.body.name;
+      product.pdescription=req.body.pdescription;
+      product.location=req.body.location;
+      product.author=req.body.author;
+      product.delivery=req.body.delivery;
+      product.price =req.body.price;
+      product.expiredate =req.body.expiredate;
+      product.image =req.body.image;
+      product.category=req.body.category;
       // Add more properties as needed
 
       console.log("Updated product:", product);
@@ -92,19 +94,52 @@ const add_product=async(req,res)=>{
     res.status(500).send({ success: false, msg: "Internal server error" });
   }
 }
- 
- const deleteProduct=async(req,res)=>{
-  try{
-
-  }catch(error){
+//deleting the product
+const deleteProduct = async (req, res) => {
+  try {
+    const id = req.params._id.replace(':', '');
+    
+    // Find the product by ID and remove it
+    const deletedProduct = await Product.findByIdAndRemove(id);
+    
+    if (deletedProduct) {
+      res.status(200).send({ success: true, msg: "Product deleted successfully" });
+    } else {
+      res.status(404).send({ success: false, msg: "Product not found" });
+    }
+  } catch (error) {
     console.log(error);
+    res.status(500).send({ success: false, msg: "Internal server error" });
+  }
+}
+//search 
+//search product
+const searchProduct = async(req,res)=>{
+  try {
+   var search = req.body.search;
+    var product_data = await Product.find({
+      $or: [
+        { name: { $regex: ".*" + search + ".*", $options: "i" } },
+        { author: { $regex: ".*" + search + ".*", $options: "i" } }
+      ]
+    })
+    if (product_data.length > 0){
+     res.status(200).send({success:true,msg:"products Datails",data:product_data});
+    }
+    else{
+     res.status(200).send({success:true,msg:"products not found!"});
+    }
+ 
+ 
+  } catch(error){
+   res.status(400).send({success:false,msg:error.message})
   }
  }
-  
+
   module.exports = {
     add_product,
     getProductDetail,
-    updateProduct,deleteProduct,singleProduct
+    updateProduct,deleteProduct,singleProduct,searchProduct
   };
 
 

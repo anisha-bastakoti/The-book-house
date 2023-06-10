@@ -4,18 +4,22 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/schema");
 
 const isAuthenticated = tryCatch(async (req, res, next) => {
-  const { token } = req.cookies;
+    const { token } = req.cookies;
+  
+    if (!token) {
+      return res.status(401).json({ error: "Please login to access any resources" });
+    }
+  
+    try {
+      const decodedData = jwt.verify(token, 'ertyb667ee4tv');
+      req.user = await User.findById(decodedData.id);
+      next();
+    } catch (error) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+  });
 
-  if (!token) {
-    return next(new Error("Please Login to access any resources"), 201);
-  }
-
-  const decodedData = jwt.verify(token,'ertyb667ee4tv');
-
-  req.user = await User.findById(decodedData.id);
-  next();
-});
-
+  
 const authorizedRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

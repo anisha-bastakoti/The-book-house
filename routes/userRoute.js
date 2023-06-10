@@ -1,23 +1,23 @@
 const express = require("express");
 const userController = require("../controller/usercontroller");
 const userRouter =express.Router();
-const imageSchema = require('../model/image');
+const imageSchema= require('../model/image');
+const Register= require('../model/schema');
 const session =require('express-session');
 const config =require("../config/config"); 
+const bodyparser=require('body-parser');
+userRouter.use(bodyparser.json());
+userRouter.use(bodyparser.urlencoded({extended:false}));
+
+const bcrypt=require('bcrypt');
 userRouter.use(session({secret:config.sessionSceret,
 resave:false,
 saveUninitialized:false}));
-
-const auth=require('../middelware/auth');
 userRouter.get('/verify',userController.verfiyMail);
 userRouter.get('/Register',userController.register);
 userRouter.post('/Register',userController.register);
 userRouter.get('/login',userController.login);
 userRouter.post('/login',userController.login);
-userRouter.put("/review",userController.createProductReviews)
-userRouter.get("/reviews",userController.getAllReviews)
-userRouter.delete('/reviews',userController.deleteReview)
-//upload image 
 userRouter.use( express.static('public'));
 
 require("../model/image");
@@ -42,33 +42,118 @@ cb(null,name,function(err,sucess){
     }
 });
 const upload=multer({storage:storage});
-  userRouter.post('/selleraccount', upload.single('image'), async (req, res) => {
-    console.log(req.file);
-    try {
-      // Check if the required fields are filled
-      if (!req.body.name || !req.body.location || !req.body.phone || !req.file) {
-        req.flash('message', 'Please fill in all the fields.');
-        return res.redirect('/sellerAccount');
-      }
+userRouter.post('/selleraccount', upload.single('image'), async (req, res) => {
+  console.log(req.file);
+  try {
+    // Check if the required fields are filled
+    if (!req.body.name || !req.body.location || !req.body.phone || !req.file || !req.body.email || !req.body.password) {
+      req.flash('message', 'Please fill in all the fields.');
+      return res.redirect('/sellerAccount');
+    }
+
+    const { email, password } = req.body;
+
+    const user = await Register.findOne({ email });
+    if (!user) {
+      req.flash('message', 'Invalid email address');
+      return res.redirect('/selleraccount');
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      req.flash('message', "Email and password didn't match");
+      return res.redirect('/selleraccount');
+    }
+
+    const newImage = new imageSchema({
+      name: req.body.name,
+      location: req.body.location,
+      phone: req.body.phone,
+      image: req.file.filename,
+      email: req.body.email,
+      password: req.body.password,
+    });
+
+    const users= await newImage.save();
+   res.render('userprofile',{users})
+   
+    
+  } catch (error) {
+    res.status(400).send({ success: false, msg: error.message });
+  }
+});
+ userRouter.get('/userprofile',async(req,res)=>{ 
+  try {
+    const user = await imageSchema.find({});
+    console.log([user]);
+    res.send({ success: true, msg: 'error', user:user });
+  } catch (error) {
+    console.error(error);
+    res.send({ success: false, msg: 'Error retrieving user', error });
+  }
+});
+ 
+    
   
-      const newImage = new imageSchema({
-        name: req.body.name,
-        location: req.body.location,
-        phone: req.body.phone,
-        image: req.file.filename,
-        email: req.body.email,
-        password: req.body.password,
-      });
-     const users=await newImage.save();
-     
-      //req.flash('message', 'Successfully created account');
-      res.redirect('/userprofile',200,{data:users});
-      console.log(users);
-    }   
-     catch(error){
-          res.status(400).send({sucess:false,msg:error.message});
-     }
-  });
-  
-userRouter.get('/userprofile',userController.displayUser)
+
+    
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+//   userRouter.post('/selleraccount',upload.single('image'),async (req, res) => {
+//     console.log(req.file);
+//     try {
+//       // Check if the required fields are filled
+//       if (!req.body.name || !req.body.location || !req.body.phone || !req.file||!req.body.email||!req.body.password) {
+//         req.flash('message', 'Please fill in all the fields.');
+//         return res.redirect('/sellerAccount');
+//       }
+//       const { email, password } = req.body;
+//       const userEmail = await Register.findOne({ email });
+//     if (userEmail) {
+//       const passwordMatch = await bcrypt.compare(password, userEmail.password);
+//       if (passwordMatch) {
+//         return res.status(201).render('userprofile');
+//       } else {
+//         req.flash('message', "Email and password didn't match");
+//         return res.redirect('/selleraccount');
+//       }
+//     }
+//       const newImage = new imageSchema({
+//         name: req.body.name,
+//         location: req.body.location,
+//         phone: req.body.phone,
+//         image: req.file.filename,
+//         email: req.body.email,
+//         password: req.body.password,
+//       });
+//      const users=await newImage.save();
+//       res.render('userprofile',{users:[users]});
+//       console.log(users.name);
+//       console.log(users.email);
+//     }   
+//      catch(error){
+//           res.status(400).send({sucess:false,msg:error.message});
+//      }
+//   });
+// userRouter.get('/userprofile',(req, res) => {
+//     // Retrieve the users data from the session
+//     const users = req.session.users;
+    
+//     // Render the EJS template and pass the users data
+//     res.render('userprofile', { users: users });
+//   });
+userRouter.route("/review").put(userController.createProductReviews)
+userRouter.route("/reviews").get(userController.getAllReviews).delete(userController.deleteReview)
 module.exports =userRouter;

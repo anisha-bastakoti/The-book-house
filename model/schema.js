@@ -36,14 +36,6 @@ const jwt =require('jsonwebtoken')
         
  });
  
- RegisterSchema.methods.getJwtToken = function () {
-    return jwt.sign({ id: this._id },'ertyb667ee4tv', {
-      expiresIn: '5d',
-    });
-  };
-  
-
- 
  //we need to create collection 
  const Register= new mongoose.model("LOGreg",RegisterSchema);
  module.exports = Register;

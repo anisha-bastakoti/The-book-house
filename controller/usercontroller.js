@@ -9,7 +9,6 @@ const Register =require('../model/schema');
 //const { use } = require("../routes/login");
 const { Cookie } = require("cookie-parser");
 const user=require('../model/image')
-const sendToken=require('../middelware/sendToken')
 const imageSchema=require('../model/image');
 //sendverfiymail
 const sendVerfiyMail=async(name,email,user_id)=>{
@@ -81,23 +80,32 @@ if (password !== confirmpassword) {
       confirmpassword:hashPassword,
       is_verified:0,
   });
-
+   // Create token
+  const token = jwt.sign(
+    { user_id: user._id, email },
+    'N234UTR5679',
+    {
+      expiresIn: "2h",
+    }
+  );
+  user.token = token;
+  console.log(token);
   await user.save();
+  
+  // Return response or perform further actions
+ //res.status(200).json({ success: true, token });
   if(user){
-     sendVerfiyMail(req.body.name, req.body.email, user._id);
+    sendVerfiyMail(req.body.name, req.body.email, user._id);
   req.flash('message', 'Registration successful. Please check your email for verification.');
   return res.render('register', { message: req.flash('message') }); // Pass the message to the register pag
     }
-    sendToken(user, 201, res);
   }
   catch (error) {
     console.log(error);
          req.flash('message','Registration failed');
         return res.redirect('/register');
   }
-  
   };
-  
  const verfiyMail=async(req,res)=>{
   try{
     const updateInfo = await Register.updateOne({ _id: req.query._id }, { $set: { is_verified: true } });
@@ -120,7 +128,18 @@ async function login(req, res) {
       
     
   if (passwordMatch) {
-    sendToken(user, 201, res);
+    // Create token
+    const token = jwt.sign(
+      { user_id: userEmail._id, email },
+      'N234UTR5679',
+      {
+        expiresIn: "2h",
+      }
+      
+    );
+   
+    userEmail.token = token;
+    console.log(token);
         return res.status(201).render('homepage');
       }
       else {
@@ -142,68 +161,36 @@ async function login(req, res) {
 
   }
 }
-const displayUser=async(req,res)=>{
-    try{
-      
-      // Fetch all products from the database
-     await imageSchema.find();
-     const users = global.usersData;
-     //const users = req.session.users;
-  
-   // Return the products as a response
-  res.render('userprofile',{ success: true, data:users});
-
-  }catch(error){
-      res.status(400).send({sucess:false,msg:error.message});
-  }
-};
-  
+   
 // Add reviews and ratings for Products
 const createProductReviews = (async (req, res, next) => {
   const { rating, comment, userId } = req.body;
 try{
   const review = {
-    user: req.user._id,//sodhchu hai paxi 
-    name: req.user.name,
+    user: req.user.id,
     rating: Number(rating),
     comment
   };
 
-  const userreview = await imageSchema.findById(userId);
+  // Find the product by its ID
+  const product = await imageSchema.findById(userId);
 
-  const isReviewed = userreview.reviews.find(
-    (rev) => rev.user.toString() == req.user._id.toString()
-  );
-  if (isReviewed) {
-    userreview.reviews.forEach((rev) => {
-      if (rev.user.toString() == req.user._id.toString()) 
-        (rev.rating = rating),
-        (rev.comment = comment)
-    });
+  // Add the review to the product's reviews array
+  imageSchema.reviews.push(review);
 
-  } else {
-    userreview.reviews.push(review);
-    userreview.numOfReview = userreview.reviews.length
-  }
-  
-   
-  let avg = 0;
-   userreview.reviews.forEach(rev =>{
-    avg = avg + rev.rating
-  })
- 
- userreview.ratings = avg / product.reviews.length
- userreview.save({validateBeforeSave:false})
+  // Update the product's average rating
+  const ratingsSum = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+  product.averageRating = ratingsSum / product.reviews.length;
 
- res.status(200).json({
-  success: true,
- });
- }catch(error){
-console.log(error);
- }
- })
- 
+  // Save the updated product
+  await product.save();
 
+  res.status(201).json({ success: true, message: 'Review created successfully' });
+} catch (error) {
+  console.log(error);
+  res.status(500).json({ success: false, message: 'An error occurred while creating the review' });
+}
+});
 // get all reviews 
 const getAllReviews = (async(req, res, next)=>{
 try{
@@ -266,5 +253,5 @@ const deleteReview = (async(req, res, next)=>{
   })
 //for verying register
 module.exports ={register,
-  login,verfiyMail,displayUser,
+  login,verfiyMail,
   deleteReview,getAllReviews,createProductReviews};

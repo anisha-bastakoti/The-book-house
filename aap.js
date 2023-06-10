@@ -88,6 +88,9 @@ app.use('/',userRoute);
 const productroute=require('./routes/productRoute');
 app.use('/',productroute);
 
+const cartroute=require('./routes/cartRoute');
+app.use('/',cartroute);
+
 
 
 

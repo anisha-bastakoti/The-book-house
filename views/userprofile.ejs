@@ -18,26 +18,39 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">User Profile</h5>
-            <form>
+            <h5 class="card-title"> userprofile</h5>
+            <form action="/userprofile" method="post"></form>
+              <div class="avatar">
+                  <img src="/upload/<%= users.image %>" alt="" class="round-circle">
+              </div>
+             
               <div class="mb-3">
-                <label class="form-label">name:<%= data.name %></label>
+                <label class="form-label">Name <%= users.name%></label>
                 <!-- Replace with actual username -->
               </div>
+            <div class="mb-3">        
+                <label class="form-label">Location: <%= users.location %></label>
+              </div>
+      
+              <!-- Replace with actual username -->
+            </div>
               <div class="mb-3">
-                <label class="form-label">Phone</label>
-              
+                <label class="form-label">Phone:<%= users.phone %></label>
+            
               </div>
               <div class="mb-3">
-                <label class="form-label">Email</label>
+             
+                <label class="form-label">Email:<%=users.email%></label>
                <!-- Replace with actual email address -->
               </div>
-              <div class="mb-3">
-                <button class="btn btn-primary form-label"><a href="rating">Review user</button></a>
-               </div>
+      
                 <!-- Replace with actual review form -->
-              
+                <div class="mb-3">
+                  <button class="btn btn-primary form-label"><a href=" ">Rate user</button></a>
+                 </div>
+                  
             </form>
+          
           </div>
         </div>
       </div>
@@ -79,7 +92,9 @@
 .form-label {
   font-weight: bold;
 }
-
+.round-circle {
+  border-radius:0.5%;
+}
 /* Style the Review button */
 .btn-primary.form-label {
   background-color: white;

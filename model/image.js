@@ -14,7 +14,8 @@ var imageSchema = new mongoose.Schema({
     minLength: [8, "password should have 8 characters"],
   },
     image:{ 
-      type:String,  
+      type:String,
+  
     },
     email:{
       type:String,

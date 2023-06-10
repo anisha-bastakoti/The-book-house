@@ -33,10 +33,14 @@
                     <a href="/products/<%= product._id %>">
                       <i class="fa-sharp fa-solid fa-eye" style="font-size: 24px; color: black;"></i>
                     </a>
-                    <a href="">
-                       <i class="fa-solid fa-cart-shopping" style="font-size: 24px; color: black;"></i>
-                    </a>
-                  </div>
+                    <form action="/carts" method="post"enctype="multipart/form-data" >
+                      <input type="hidden" value="<%= product._id %>" name="productId">
+                      <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                     </div>
+                 
+           
+                </form>
                 
                 </div>
               </div>
