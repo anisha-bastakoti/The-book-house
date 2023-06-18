@@ -1,56 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./partial/css') %>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Detail</title>
+  <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/productDetail.css">
 </head>
-
+<%- include('./partial/productfooter') %>
 <body>
   <form action="/products" method="post"></form>
-  <div class="container">
-    <div class="row justify-content-center">
-       <% data.forEach(product => { %>
-            <div class="col-md-6">
-              <div class="card">
-                <img src="/productImage/<%=product.image %>" alt="Product Image" class="card-img-top">
-                <div class="card-body">
-                  <h5 class="card-title"><%=product.name%></h5>
-                  <p class="card-text price"> RS:<%= product.price %></p>
-                
-                  <style>
-                    .icon-container {
-                      display: flex;
-                      justify-content:space-evenly;
-                      margin-top: 10px;
-                    }
-                  </style>
-                  
-                  <div class="icon-container">
-                    <a href="/products/<%= product._id %>">
-                      <i class="fa-sharp fa-solid fa-eye" style="font-size: 24px; color: black;"></i>
-                    </a>
-                    <form action="/carts" method="post"enctype="multipart/form-data" >
-                      <input type="hidden" value="<%= product._id %>" name="productId">
-                      <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form>
-                     </div>
-                 
-           
-                </form>
-                
+  <section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+        <% data.forEach(product => { %>
+        <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+          <div class="card">
+            <div class="d-flex justify-content-between p-3">
+            </div>
+            <img src="/productImage/<%=product.image %>"
+              class="card-img-top" alt="<%= product.name %>" width="250" height="250">
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-3">
+                <h5 class="mb-0"><%=product.name %></h5>
+                <h5 class="text-dark mb-0"> Rs<%=product.price %></h5>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <p class="text-muted mb-0">Available: <span class="fw-bold">6</span></p>
+                <div class="ms-auto text-warning">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
                 </div>
               </div>
+              <div class="icon-container">
+                <a href="/products/<%= product._id %>">
+                  <button type="submit" class="btn btn-primary">View</button>
+                </a>
+                <form action="/carts" method="post" enctype="multipart/form-data">
+                  <input type="hidden" value="<%= product._id %>" name="productId">
+                  <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+              </div>   
             </div>
-         <% }) %>
+          </div>
         </div>
+        <% }) %>
       </div>
-    
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </body>
-    
-    </html>
-     
+    </div>
+  </section>
+  <style>
+    .icon-container {
+   display:flex;
+ /* Adjust the value as needed */
+}
+.icon-container button{
+  margin-right:50px;
+}
+  </style>
+  
+
+    }
+  </style>

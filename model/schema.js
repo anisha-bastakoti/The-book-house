@@ -29,10 +29,10 @@ const jwt =require('jsonwebtoken')
         required:true,
     },
 }],
-   is_verified:{
-   type:String,
-   required:true
-}
+is_verified: {
+    type: String,
+    
+  },
         
  });
  

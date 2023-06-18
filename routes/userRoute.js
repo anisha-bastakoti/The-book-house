@@ -3,17 +3,13 @@ const userController = require("../controller/usercontroller");
 const userRouter =express.Router();
 const imageSchema= require('../model/image');
 const Register= require('../model/schema');
-const session =require('express-session');
-const config =require("../config/config"); 
+//const optVerification=require('../model/otpVerification'); 
 const bodyparser=require('body-parser');
 userRouter.use(bodyparser.json());
 userRouter.use(bodyparser.urlencoded({extended:false}));
 
 const bcrypt=require('bcrypt');
-userRouter.use(session({secret:config.sessionSceret,
-resave:false,
-saveUninitialized:false}));
-userRouter.get('/verify',userController.verfiyMail);
+//userRouter.get('/verify',userController.verfiyOTP);
 userRouter.get('/Register',userController.register);
 userRouter.post('/Register',userController.register);
 userRouter.get('/login',userController.login);

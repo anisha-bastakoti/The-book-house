@@ -32,12 +32,7 @@
          
       </div>
       <button type="submit" class="login-btn">Register</button>
-      <div class="alert ">
-        <% if(typeof message !='undefined' && message.length > 0) { %>
-          <div>
-            <%= message %>
-          </div>
-        <% } %>
+     <%-messages('messages',locals)%>
     </div>
   </form>
   

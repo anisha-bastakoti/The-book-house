@@ -1,147 +1,101 @@
-const Cart = require('../model/cartModel');
-const Product=require('../model/productModel')
-exports.cart = async () => {
-    const carts = await Cart.find().populate({
-        path: "items.productId",
-        select: "name price total"
-    });;
-    return carts[0];
-};
-exports.addItem = async payload => {
-    const newItem = await Cart.create(payload);
-    return newItem
+const Cart = require('../model/cartModel')
+const Product = require('../model/productModel');
+ const addtocart = async(req,res)=>{
+  try{
+  var productId= req.params._id;
+  Cart.find({product:productId});
+
+  const product = req.body.productId; // Assuming you're getting the product from the request body
+  const p = await Product.findOne({ product: product });
+  if (!p) {
+    // Product not found
+    req.flash('error', 'Product not found');
+    res.redirect('back');
+    return;
+  }
+  if (typeof req.session.cart === 'undefined') {
+    req.session.cart = [];
+    req.session.cart.push({
+      price: parseFloat(p.price).toFixed(2),
+      quantity: 1,
+      name:p.name,
+      image: p.image
+    });
+  }
+  else {
+    var cart = req.session.cart;
+    var newItem = true;
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].productId=== p._id) {
+        cart[i].quantity++;
+        newItem = false;
+        i++;
+      }
+    }
+  }
+    if (newItem) {
+      cart.push({
+        name:p.name,
+        price: parseFloat(p.price).toFixed(2),
+        quantity: 1,
+        image: p.image
+      });
+    }
+    await Cart.findOneAndUpdate(
+// Assuming you have a user associated with the cart
+      { items: req.session.cart },
+      { upsert: true }
+    );
+
+   
+  console.log(req.session.cart);
+  
+  res.redirect('/products',200,{sucess:true,message:'Product added'});
+
+} catch (err) {
+  console.log(err);
+  res.redirect('/products',400,{sucess:true,message:'An error occurred'});
+  
 }
-
-    
-
-    exports.addItemToCart = async (req, res) => {
-        const {
-            productId
-        } = req.body;
-        const quantity = Number.parseInt(req.body.quantity);
-        try {
-          const cart = await Cart.findOne();
-            let productDetails = await Product.findById(productId);
-                 if (!productDetails) {
-                return res.status(500).json({
-                    type: "Not Found",
-                    msg: "Invalid request"
-                })
-            }
-            //--If Cart Exists ----
-            if (cart) {
-                //---- Check if index exists ----
-                const indexFound = cart.items.findIndex(item => item.productId.id == productId);
-                //const indexFound = cart.items.getIndexes(item => item.productId.id == productId);
-                //------This removes an item from the the cart if the quantity is set to zero, We can use this method to remove an item from the list  -------
-                if (indexFound !== -1 && quantity <= 0) {
-                    cart.items.splice(indexFound, 1);
-                    if (cart.items.length == 0) {
-                        cart.subTotal = 0;
-                    } else {
-                        cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
-                    }
-                }
-                //----------Check if product exist, just add the previous quantity with the new quantity and update the total price-------
-                else if (indexFound !== -1) {
-                    cart.items[indexFound].quantity = cart.items[indexFound].quantity + quantity;
-                    cart.items[indexFound].total = cart.items[indexFound].quantity * productDetails.price;
-                    cart.items[indexFound].price = productDetails.price
-                    cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
-                }
-                //----Check if quantity is greater than 0 then add item to items array ----
-                else if (quantity > 0) {
-                    cart.items.push({
-                        productId: productId,
-                        quantity: quantity,
-                        price: productDetails.price,
-                        total: parseInt(productDetails.price * quantity)
-                    })
-                    cart.subTotal = cart.items.map(item => item.total).reduce((acc, next) => acc + next);
-                }
-                //----If quantity of price is 0 throw the error -------
-                else {
-                    return res.status(400).json({
-                        type: "Invalid",
-                        msg: "Invalid request"
-                    })
-                }
-                let data = await cart.save();
-                res.status(200).json({
-                    type: "success",
-                    mgs: "Process successful",
-                    data: data
-                })
-            }
-            //------------ This creates a new cart and then adds the item to the cart that has been created------------
-            else {
-                const cartData = {
-                    items: [{
-                        productId: productId,
-                        quantity: quantity,
-                        total: parseInt(productDetails.price * quantity),
-                        price: productDetails.price
-                    }],
-                    subTotal: parseInt(productDetails.price * quantity)
-                }
-                cart = await cartRepository.addItem(cartData)
-                // let data = await cart.save();
-                res.json(cart);
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(400).json({
-                type: "Invalid",
-                msg: "Something went wrong",
-                err: err
-            })
+}
+//getcheckoutpage
+const checkOut= async(req,res)=>{
+  const cart=req.session.cart;
+res.render('checkout',{carts:cart})
+console.log(cart)
+}
+ const updatePage=async (req,res)=>{
+  try{
+    var product=req.params._id;
+    var cart =req.session.cart;
+    var action =req.query.action;
+    for (var i=0;i<cart.length;i++){
+      if(cart[i]._id==product._id){
+        switch(action){
+          case "add":
+            cart[i].quantity++;
+            break;
+            case "remove":
+              cart[i].quantity--;
+              if(cart[i].quantity<1 )cart.splice(i,1)
+              break;
+              case "clear":
+                cart[i].splice(i,1);
+                break;
+                default:
+                  console.log("update problem")
+                  break;
         }
+        break;
+  
+      }
     }
-    exports.getCart = async (req, res) => {
-        try {
-            let cart = await Cart.find()
-            if (!cart) {
-                return res.status(400).json({
-                    type: "Invalid",
-                    msg: "Cart not Found",
-                })
-            }
-            res.status(200).json({
-                status: true,
-                data: cart
-            })
-        } catch (err) {
-            console.log(err)
-            res.status(400).json({
-                type: "Invalid",
-                msg: "Something went wrong",
-                err: err
-            })
-        }
-    }
+   res.redirect('/carts/checkout');
+  }catch(error){
+    console.log(error);
+  }
+  };
 
-    exports.emptyCart = async (req, res) => {
-        try {
-            let cart = await Cart.cart();
-            cart.items = [];
-            cart.subTotal = 0
-            let data = await cart.save();
-            res.status(200).json({
-                type: "success",
-                mgs: "Cart has been emptied",
-                data: data
-            })
-        } catch (err) {
-            console.log(err)
-            res.status(400).json({
-                type: "Invalid",
-                msg: "Something went wrong",
-                err: err
-            })
-        }
-    }
- 
- 
- 
- 
- 
+module.exports = {
+addtocart,checkOut,updatePage
+};

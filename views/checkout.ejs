@@ -1,0 +1,70 @@
+ <div class="col-md-4">
+                <div class="card">
+                    <img src="" alt="" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title"> </h5>
+                        <p class="card-text"></p>
+                        <p class="card-text"></p>
+                        <div class="btn-group" role="group">
+                            
+<%- include('./partial/meta') %>
+<% if (typeof carts!=='undefined'&& carts.length > 0) { %>
+    <h1 class="page-tittle">My Cart</h1>
+    <br>
+    <table class="table table-stripped alignmiddle">
+        <tr>
+            <th>Image</th>
+            <th>name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th></th>
+            <th>Subtotal</th>
+        </tr>
+        <%var total=0;%>
+        <% carts.forEach(product => { %>
+            <% var sub=parseFloat(product.quantity* product.price).toFixed(2)%>
+            <% total += +sub  %>
+         <tr>
+            <td><img src="/productImage/<%=product.image %>"alt="" class="cp1"></td>
+            <td><%=product.name %> </td>
+            <td><%=product.price %></td>
+            <td><%=product.quantity%></td>
+            <td>
+             <a href="/carts/update/<%= product.title %>?action= add"> + </a>&nbsp;
+            <a href="/carts/update/<%= product.title%>?action=remove"> - </a>&nbsp;
+            <a href="/carts/update/<%= product.title %>?action=clear"> clear </a>&nbsp;
+            </td>
+            <td> Rs<%=sub%></td>
+         </tr>
+        <% }) %>
+        <tr>
+            <td colspan="6" align="right" > <b> Total:</b>RS <%= parseFloat(total).toFixed(2) %></td>
+         </tr>
+         <tr>
+            <td colspan="5" align="right">
+               <button >
+                <a class="btn btn-danger" href="/carts/clear"> Clear cart</a></button>
+            </td>
+            <td colspan="5" align="right">
+               <button>
+                <a class="btn btn-primary buynow" href=" ">Buy now</a></button>
+            </td>
+         </tr>
+    </table>
+<% }else{%>
+    <h1 class="text-center">
+        your cart is empty
+    </h1>
+<%}%>
+
+ <style>
+    img.cp1{
+        width:100px;
+    }
+    table.alignmiddle td{
+        vertical-align: middle !important;
+        
+    }
+ </style>
+  <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/boots

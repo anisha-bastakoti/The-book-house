@@ -1,0 +1,114 @@
+*{
+    margin:0;
+    padding: 0;
+    font-family: 'Poppins',sans-serif;
+    box-sizing: border-box;
+}
+.hero{
+    width: 100%;
+    min-height: 100vh;
+    color: #525252;
+}
+nav{
+    width: 100%;
+    padding: 10px 10%;
+    display: flex;
+    align-items: space-between;
+    position: relative;
+    background-color: #E5F6DF;
+}
+.logo{
+width: 120px;
+}
+.userlogo{
+width: 40px;
+border-radius: 50%;
+cursor: pointer;
+margin-left: 30px;
+}
+nav ul{
+    width: 100%;
+    text-align: right;
+}
+nav ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 10px 20px;
+}
+nav ul li a{
+    color: black;
+    text-decoration: none;
+}
+.sub-menu-wrap{
+    position: absolute;
+    top:100%;
+    right:10%;
+    width:320px;
+    max-height:0px ;
+    overflow: hidden;
+    transition: max-height 0.5s;
+
+}
+.sub-menu-wrap.open-menu{
+ max-height: 400px;
+}
+.sub-menu{
+    background-color:pink;
+    padding: 20px;
+    margin: 10px;
+    text-align: right;
+}
+.user-info{
+    display: flex;
+    align-items: center;
+    margin-left: auto
+}
+.user-info h2{
+    font-weight: 500;
+}
+.user-info img{
+    width:100px;
+    border-radius:25%;
+    margin-right: 5px;
+
+}
+.sub-menu hr{
+    border:0;
+    height:3px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px ;
+}
+.sub-menu-link{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0 ;
+}
+.sub-menu-link p{
+    width:35%;
+text-decoration: none;
+}
+    .sub-menu-link img{
+        width: 50px;
+        background: #e5e5e5;
+        border-radius:40%;
+        padding:8px;
+        margin-right:5px;
+    }
+    .sub-menu-link span{
+        font-size:22px;
+        width: 100%;
+        transition:transfrom 0.5s;
+
+    }
+    .sub-menu-link:hover span{
+        transform: translate(5px);
+        color: black;
+    }
+    .sub-menu-link:hover p{
+        font-weight: 600;
+        color: black;
+
+    }

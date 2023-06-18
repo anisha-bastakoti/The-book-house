@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 let ItemSchema = new Schema({
-    productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        productId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
     },
     quantity: {
         type: Number,
@@ -17,15 +18,15 @@ let ItemSchema = new Schema({
     total: {
         type: Number,
         required: true,
-    }
-}, {
-    timestamps: true
+    },
+    
 })
+
 const CartSchema = new Schema({
     items: [ItemSchema],
     subTotal: {
         default: 0,
-        type: Number
+        type:Number
     }
 }, {
     timestamps: true
