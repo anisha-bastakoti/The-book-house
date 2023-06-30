@@ -124,6 +124,9 @@ app.get('/addpages',(req,res)=>{
 app.get('/pages',(req,res)=>{
   res.render('pages');
 });
+app.get('/addcategory',(req,res)=>{
+  res.render('categories');
+});
 
 //for middleware
 app.use(morgan('tiny'));
@@ -143,6 +146,9 @@ app.use('/',cartroute);
 
 const pageRoute= require('./routes/pageRoute');
 app.use('/',pageRoute);
+const catRoute= require('./routes/categoryRoute');
+app.use('/',catRoute);
+
 
 
 //for middleware
