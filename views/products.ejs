@@ -7,9 +7,51 @@
   <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<%- include('./partial/productfooter') %>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Bookly</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      <form class="form-inline my-2 my-lg-0">
+       <form action="/products?keyword=<%=query%>" method="GET">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        </form>
+        
+        
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+
+      <form class="form-inline my-2 my-lg-0" action="/products" method="GET">
+        <select name="category" id="categorySelect">
+          <option value=""> Categories</option>
+          <option value="Spiritual">Spiritual</option>
+          <option value="Frictional">Frictional</option>
+          <option value="Nonfrictional">Nonfrictional</option>
+          <!-- Add more options as needed -->
+        </select>
+      <li class="nav-item active">
+        <a class="nav-link" href="/checkout">Carts
+        </a>
+            
+      </li>
+      <li class="nav-item active">
+          <a class="nav-link disabled" href=" ">MyProfile</a>
+        </li>
+      <li class="nav-item active">
+        <a class="nav-link disabled" href=" ">Logout</a>
+      </li>
+    </ul>
+    </div>
+  </nav> 
   <form action="/products" method="post"></form>
+  
   <section style="background-color: #eee;">
     <div class="container py-5">
       <div class="row">
@@ -39,19 +81,89 @@
                 <a href="/products/<%= product._id %>">
                   <button type="submit" class="btn btn-primary">View</button>
                 </a>
-                <form action="/carts" method="post" enctype="multipart/form-data">
-                  <input type="hidden" value="<%= product._id %>" name="productId">
+                <a href="/addtocarts/<%=product._id  %>">
                   <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </form>
+                </a>
               </div>   
             </div>
           </div>
         </div>
         <% }) %>
       </div>
-    </div>
+      <!-- search product-->
+      <% if (query) { %>
+        <div class="container py-5">
+          <% if (match.length > 0) { %>
+            <div class="row">
+              <% match.forEach(product => { %>
+                <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+                  <!-- Product card code here -->
+                  <h5><%= product.name %></h5>
+                  <p>Author: <%= product.author %></p>
+                  <!-- Additional product details or HTML code here -->
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <h3>No products found for '<%= query %>'</h3>
+          <% } %>
+        </div>
+      <% } %>
+      
+      <!-- page -->
+      <% if (productCount > resultPerPage) { %>
+        <div class="pagination">
+          <% const pageCount = Math.ceil(productCount / resultPerPage); %>
+       
+          <% for (let i = 1; i <= pageCount; i++) { %>
+            <% if (i === resultPerPage) { %>
+              <span class="active"><%= i %></span>
+            <% } else { %>
+              <a href="?page=<%= i %>"><%= i %></a>
+            <% } %>
+          <% } %>
+          
+        </div>
+      <% } %>
+      
+      
   </section>
   <style>
+    .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+select {
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  .pagination a,
+  .pagination span {
+    padding: 8px;
+    margin: 4px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .pagination a:hover {
+    background-color: #f4f4f4;
+  }
+
+  .pagination .active {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .pagination .previous,
+  .pagination .next {
+    font-weight: bold;
+  }
     .icon-container {
    display:flex;
  /* Adjust the value as needed */
@@ -60,7 +172,21 @@
   margin-right:50px;
 }
   </style>
-  
+  <script>
+    // Retrieve the category select element
+const categorySelect = document.getElementById('categorySelect');
 
-    }
-  </style>
+// Add event listener for category selection change
+categorySelect.addEventListener('change', () => {
+  // Get the selected category value
+  const selectedCategory = categorySelect.value;
+
+  // Update the URL with the selected category
+  const url = new URL(window.location.href);
+  url.searchParams.set('category', selectedCategory);
+
+  // Redirect to the updated URL
+  window.location.href = url.href;
+});
+  </script>
+  

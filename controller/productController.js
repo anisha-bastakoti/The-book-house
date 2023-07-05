@@ -1,7 +1,46 @@
 const Product=require('../model/productModel');
-const NameController=require('../controller/nameController');
 const Seller=require('../model/image');
 const image = require('../model/image');
+const ApiFeature = require("../utlis/apifeatures");
+const getAllProducts = async (req, res) => {
+  const resultPerPage = 6;
+  const productCount = await Product.countDocuments();
+  const apiFeature = new ApiFeature(Product.find(), req.query)
+    .filter()
+    .search()
+    .pagination(resultPerPage);
+  // Handle Category Filter
+  if (req.query.category) {
+    apiFeature.query = apiFeature.query.find({ category: req.query.category });
+  }
+
+  const products = await apiFeature.query;
+  console.log(products);
+  const categories = ['Spiritual', 'Frictional', 'Nonfrictional','TextBook','Notebook'];
+  const searchQuery = req.query.keyword;
+  let query = {};
+
+  if (searchQuery) {
+    query = {
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { author: { $regex: searchQuery, $options: 'i' } }
+      ]
+    };
+  }
+  
+  res.render('products', {
+    data: products,
+    productCount,
+    resultPerPage,
+    category:categories,
+     query:searchQuery,
+  
+  });
+  
+};
+
+
 const add_product=async(req,res)=>{
     try { 
       const seller = await Seller.findOne();
@@ -9,6 +48,7 @@ const add_product=async(req,res)=>{
       const sellerId = seller._id;
        const product = new Product({
           name: req.body.name,
+         // slug:req.body.title,
           pdescription: req.body.pdescription,
           category:req.body.category,
           location: req.body.location,
@@ -112,86 +152,12 @@ const deleteProduct = async (req, res) => {
     res.status(500).send({ success: false, msg: "Internal server error" });
   }
 }
-//search 
-//search product
-const searchProduct = async(req,res)=>{
-  try {
-   var search = req.body.search;
-    var product_data = await Product.find({
-      $or: [
-        { name: { $regex: ".*" + search + ".*", $options: "i" } },
-        { author: { $regex: ".*" + search + ".*", $options: "i" } }
-      ]
-    })
-    if (product_data.length > 0){
-     res.status(200).send({success:true,msg:"products Datails",data:product_data});
-    }
-    else{
-     res.status(200).send({success:true,msg:"products not found!"});
-    }
- 
- 
-  } catch(error){
-   res.status(400).send({success:false,msg:error.message})
-  }
- }
 
   module.exports = {
-    add_product,
+    add_product,getAllProducts,
     getProductDetail,
-    updateProduct,deleteProduct,singleProduct,searchProduct
+    updateProduct,deleteProduct,singleProduct
   };
 
 
 
-// const getProduct=async(req,res)=>{
-//  try{
-//        var sendData=[];
-//        var catData =await categoryController.getCategory();
-//        if(catData.length > 0){
-//            res.status(200).send({sucess:false,msg:"product details",data:sendData});
-//           for(let i=0 ;i<catData.length;i++){
-//             var productData=[];
-//             var catId =catData[i]['_id'].toString();
-//               var catPro = await Product.find({category_id:catId});
-//               if(catPro.length >0){
-//                 for(let j=0;j<catPro.length;j++){
-//                     productData.push({
-//                        "prodductname":catPro[j]['name'],
-//                        "image":catPro[j]['image'], 
-//                        "descrption":catPro[j]['pdescription'],   
-//                        "location":catPro[j]['location'],
-//                        "author":catPro[j]['author'],
-//                        "delivery":catPro[j]['delivery'],
-//                        "price":catPro[j]['price'],
-//                        "expiredate":catPro[j]['expiredate']             
-//                        })
-//                      }
-//                      }
-//             sendData.push({
-//             "category":catData[i]['category'],
-//             "product":productData
-//             });
-//         }
-
-//             if (sendData.length > 0) {
-//                 return res.status(200) .send({ success: true, message: 'product detail', data: sendData });
-//               } else {
-//                 return res
-//                   .status(200)
-//                   .send({ success: false, message: 'No products found', data: sendData });
-//               }
-//             } else {
-//               return res
-//                 .status(200)
-//                 .send({ success: false, message: 'No categories found', data: sendData });
-//             }
-//           } catch (error) {
-//             //return res.status(400).send({ success: false, msg: error.message });
-//             console.log(error);
-//           }
-//         };
-        
-// module.exports={
-//     add_product,getProduct
-// }

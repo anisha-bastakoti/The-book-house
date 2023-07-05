@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <form action="/products?keyword=<%=search %>" method="GET">
+    <ul>
+        <% if (data) { %>
+            <h2>Search Results</h2>
+            <ul>
+              <% data.forEach(product => { %>
+                <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
+          <div class="card">
+            <div class="d-flex justify-content-between p-3">
+            </div>
+            <img src="/productImage/<%=product.image %>"
+              class="card-img-top" alt="<%= product.name %>" width="250" height="250">
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-3">
+                <h5 class="mb-0"><%=product.name %></h5>
+                <h5 class="text-dark mb-0"> Rs<%=product.price %></h5>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <p class="text-muted mb-0">Available: <span class="fw-bold">6</span></p>
+                <div class="ms-auto text-warning">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                </div>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p>No products found!</p>
+          <% } %>
+
+        
+   
+      </form>
+</body>
+</html>

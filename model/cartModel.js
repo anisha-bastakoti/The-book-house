@@ -1,34 +1,25 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-let ItemSchema = new Schema({
-        productId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product',
-            required: true
-    },
-    quantity: {
-        type: Number,
-        required: true,
-        min: [1, 'Quantity can not be less then 1.']
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    total: {
-        type: Number,
-        required: true,
-    },
-    
-})
+module.exports=function Cart(oldcart){
+    this.item=oldcart.item|| 0;
+    this.totyalQty=oldcart.totyalQty|| 0;
+    this.totaPrice=oldcart.totaPrice|| 0;
+ this.add =function(item,_id){
+    var storedItem=this.item[_id];
+    if(!storedItem){
+        storedItem=this.item[_id]={item:item,qty:0,price:0}
 
-const CartSchema = new Schema({
-    items: [ItemSchema],
-    subTotal: {
-        default: 0,
-        type:Number
     }
-}, {
-    timestamps: true
-})
-module.exports = mongoose.model('cart', CartSchema);
+    storedItem.qty++;
+    storedItem.price = storedItem.item.price * storedItem.qty; // Corrected calculation
+  this.totyalQty++;
+  this.totaPrice += storedItem.item.price; 
+   
+
+ }
+ this.generateArray=function(){
+    var arr=[];
+    for(var _id in this.item){
+        arr.push(this.item[_id])
+    }
+    return arr;
+ }
+}

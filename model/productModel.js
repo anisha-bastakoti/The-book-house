@@ -4,6 +4,7 @@ const productSchema=mongoose.Schema({
         type:String,
         required:true
     },
+    
     pdescription:{
         type:String,
         required:true

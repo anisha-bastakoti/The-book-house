@@ -32,10 +32,11 @@ const upload=multer({storage:storage});
 
 const productController=require('../controller/productController');
 productRoute.post('/addproduct',upload.single('image'),productController.add_product);
-productRoute.get('/products', productController.getProductDetail);
+//productRoute.get('/products', productController.getProductDetail);
+productRoute.get('/products', productController.getAllProducts);
 productRoute.put('/products/:_id',productController.updateProduct);
 productRoute.delete('/products/:_id',isAuthenticated ,productController.deleteProduct);
 productRoute.get('/products/:_id' ,productController.singleProduct);
-productRoute.get('/search-product',productController. searchProduct);
+
 
 module.exports=productRoute;

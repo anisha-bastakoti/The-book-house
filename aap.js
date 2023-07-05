@@ -35,7 +35,7 @@ app.use(session({
 }));
 app.use(flash());
 app.get('*',function(req,res,next){
-res.locals.cart=req.session.cart;
+res.locals.session=req.session;
 next();
 })
 app.get('*',function(req,res,next){
@@ -54,7 +54,11 @@ app.get('*',function(req,res,next){
         res.locals.pages=req.session.pages;
         next();
         })
-
+        app.get('*',function(req,res,next){
+          res.locals.data=req.session.data;
+          next();
+          }) 
+    
 //flashing message
 app.use(function(req,res,next){
 res.locals.message =req.flash('message');
@@ -97,6 +101,9 @@ app.use('/', express.static(__dirname + "/public/" + '/upload'));
 //register and login page routes
 app.get('/',(req,res)=>{
   res.render('homepage');
+});
+app.get('/categories',(req,res)=>{
+  res.render('categories');
 });
 
 app.get('/login',(req,res)=>{
