@@ -1,11 +1,11 @@
 var express=require('express');
 var router=express.Router();
 //get page model
-
+//const auth =require('../middelware/auth');
 var page = require('../model/pageModel');
 
 // Get pages index
-router.get('/pages', function(req, res) {
+router.get('/pages',function(req, res) {
     page.find({}).sort({ sorting: 1 }).exec(function(err, pages) {
            if (err) {
           console.log(err);

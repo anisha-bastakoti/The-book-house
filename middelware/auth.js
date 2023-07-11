@@ -1,33 +1,30 @@
+// Secret key for JWT
+const secretKey = 'your-secret-key';
 
-const tryCatch = require("./tryCatchError");
-const jwt = require("jsonwebtoken");
-const User = require("../model/schema");
+// Middleware to validate and retrieve the user from the token
+function verifyToken(req, res, next) {
+  // Get the token from the request headers or query parameters or cookies
+  const token = req.headers.authorization?.split(' ')[1] || req.query.token || req.cookies.token;
 
-const isAuthenticated = tryCatch(async (req, res, next) => {
-    const { token } = req.cookies;
-  
-    if (!token) {
-      return res.status(401).json({ error: "Please login to access any resources" });
-    }
-  
-    try {
-      const decodedData = jwt.verify(token, 'ertyb667ee4tv');
-      req.user = await User.findById(decodedData.id);
-      next();
-    } catch (error) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-  });
+  if (!token) {
+    // Token not provided
+    return res.status(401).json({ message: 'Authentication token required' });
+  }
 
-  
-const authorizedRoles = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      next(new Error(`Role: ${req.user.role} is not allowed `));
-    }
+  try {
+    // Verify and decode the token
+    const decoded = jwt.verify(token, secretKey);
+
+    // Attach the user to the request object
+    req.user = decoded.user;
+
+    // Proceed to the next middleware or route handler
     next();
-  };
-};
-module.exports = { isAuthenticated, authorizedRoles };
+  } catch (error) {
+    // Token verification failed
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+}
+
 
 

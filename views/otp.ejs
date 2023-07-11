@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify OTP</title>
+</head>
+<body>
+  <h1>OTP Verification</h1>
+  <div class="alert alert-danger">
+    <% if(typeof message !='undefined' && message.length > 0) { %>
+    <div>
+      <%= message %>
+    </div>
+    <% } %>
+  <form action="/verifyotp" method="post">
+    <label for="otp">Enter email:</label>
+    <input type="email" name="email" placeholder="Email" required>
+    <label for="otp">Enter OTP:</label>
+    <input type="text" name="otp" id="otp">
+    <button type="submit">Verify OTP</button>
+  </form>
+</body>
+</html>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="email"],
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  margin-bottom:10px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+</style>

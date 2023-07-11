@@ -35,7 +35,7 @@ productRoute.post('/addproduct',upload.single('image'),productController.add_pro
 //productRoute.get('/products', productController.getProductDetail);
 productRoute.get('/products', productController.getAllProducts);
 productRoute.put('/products/:_id',productController.updateProduct);
-productRoute.delete('/products/:_id',isAuthenticated ,productController.deleteProduct);
+productRoute.delete('/products/:_id',productController.deleteProduct);
 productRoute.get('/products/:_id' ,productController.singleProduct);
 
 

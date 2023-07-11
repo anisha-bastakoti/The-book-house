@@ -9,7 +9,7 @@ userRouter.use(bodyparser.json());
 userRouter.use(bodyparser.urlencoded({extended:false}));
 
 const bcrypt=require('bcrypt');
-//userRouter.get('/verify',userController.verfiyOTP);
+userRouter.post('/verifyotp',userController.verifyOtp);
 userRouter.get('/Register',userController.register);
 userRouter.post('/Register',userController.register);
 userRouter.get('/login',userController.login);
@@ -71,7 +71,7 @@ userRouter.post('/selleraccount', upload.single('image'), async (req, res) => {
     });
 
     const users= await newImage.save();
-   res.render('userprofile',{users})
+    res.render('userprofile',{users:users})
    
     
   } catch (error) {
@@ -82,7 +82,7 @@ userRouter.post('/selleraccount', upload.single('image'), async (req, res) => {
   try {
     const user = await imageSchema.find({});
     console.log([user]);
-    res.send({ success: true, msg: 'error', user:user });
+    res.render('userprofile',{users:user });
   } catch (error) {
     console.error(error);
     res.send({ success: false, msg: 'Error retrieving user', error });

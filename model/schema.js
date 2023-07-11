@@ -33,7 +33,11 @@ is_verified: {
     type: String,
     
   },
-        
+  otp:{
+    type:String,
+    required: true
+  }
+     
  });
  
  //we need to create collection 

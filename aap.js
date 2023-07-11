@@ -3,36 +3,65 @@ const app =express();
 const path= require('path');
 const morgan =require('morgan');
 const cookieParser = require('cookie-parser');
-const session =require("express-session");
 const flash =require('connect-flash');
-const multer=require('multer')
 require('express-messages');
  require('dotenv').config();
  const expressvalidator= require('express-validator');
- //const authisLoggedIn=require("./controller/auth");
- 
 
-//database connection 
-require("./database1/conne");
+ //mongodb connection 
+ const mongoose = require('mongoose');
+ //databaseconnection
+ mongoose.connect("mongodb://127.0.0.1:27017/loginreg", 
+ { useNewUrlParser: true,  
+  useUnifiedTopology: true, 
+  
+   });
+   const connection = mongoose.connection;
+
+connection.on('error', (err) => {
+  console.error('Connection error:', err);
+});
+
+connection.once('open', () => {
+  console.log('Database connected...');
+});
+
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+// Session store
+const store = new MongoStore({
+  mongooseConnection: connection,
+  collection: 'sessions',
+});
+
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
+    },
+  })
+);
+
+
+
 const {json} = require('body-parser');
 //create new user in database
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
- 
+//requiring routes
+require('./routes/web')(app)
 //setting ejs 
 app.set('view engine','ejs')
 
 //for displaying error msg
-app.use(session({
-  secret:'secret',
-  resave:false,
-  saveUninitialized:false,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
-  },
-}));
+
 app.use(flash());
 app.get('*',function(req,res,next){
 res.locals.session=req.session;
@@ -42,16 +71,9 @@ app.get('*',function(req,res,next){
   res.locals.title=req.session.title;
   next();
   })
-  app.get('*',function(req,res,next){
-    res.locals.slug=req.session.slug;
-    next();
-    })
-    app.get('*',function(req,res,next){
-      res.locals.content=req.session.content;
-      next();
-      })
+  
       app.get('*',function(req,res,next){
-        res.locals.pages=req.session.pages;
+        res.locals.users=req.session.users;
         next();
         })
         app.get('*',function(req,res,next){
@@ -128,12 +150,17 @@ app.get('/addpages',(req,res)=>{
   res.render('addpage');
 
 })
+app.get('/verifyotp',(req,res)=>{
+  res.render('otp');
+
+})
 app.get('/pages',(req,res)=>{
   res.render('pages');
 });
 app.get('/addcategory',(req,res)=>{
   res.render('categories');
 });
+
 
 //for middleware
 app.use(morgan('tiny'));
@@ -145,16 +172,16 @@ app.use(morgan('tiny'));
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
 
+const myprofileRoute= require('./routes/profileRoute');
+app.use('/',myprofileRoute);
 const productroute=require('./routes/productRoute');
 app.use('/',productroute);
-
-const cartroute=require('./routes/cartRoute');
-app.use('/',cartroute);
-
 const pageRoute= require('./routes/pageRoute');
 app.use('/',pageRoute);
 const catRoute= require('./routes/categoryRoute');
+const { Auth } = require('two-step-auth');
 app.use('/',catRoute);
+ 
 
 
 

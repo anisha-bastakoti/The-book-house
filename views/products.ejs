@@ -37,15 +37,15 @@
           <!-- Add more options as needed -->
         </select>
       <li class="nav-item active">
-        <a class="nav-link" href="/checkout">Carts
+        <a class="nav-link" href=" ">Carts
         </a>
             
       </li>
       <li class="nav-item active">
-          <a class="nav-link disabled" href=" ">MyProfile</a>
+          <a class="nav-link " href="/myprofile ">MyProfile</a>
         </li>
       <li class="nav-item active">
-        <a class="nav-link disabled" href=" ">Logout</a>
+        <a class="nav-link " href=" ">Logout</a>
       </li>
     </ul>
     </div>
@@ -81,8 +81,8 @@
                 <a href="/products/<%= product._id %>">
                   <button type="submit" class="btn btn-primary">View</button>
                 </a>
-                <a href="/addtocarts/<%=product._id  %>">
-                  <button type="submit" class="btn btn-primary">Add to Cart</button>
+                <a href=" ">
+                  <button  data-pizza="<%JSON.stringify(product) %>"class="add-to-cart" type="submit" class="btn btn-primary">Add to Cart</button>
                 </a>
               </div>   
             </div>
