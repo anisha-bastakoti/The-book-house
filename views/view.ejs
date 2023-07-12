@@ -12,7 +12,7 @@
      <header>
       <div class="product-container">
         <div class="col">
-          <img src="/productImage/<%=data.image%>" alt="Product Image" class="img-fluid">
+          <img src="/productImage/<%=data.image%>" alt="Product Image"  class="img-fluid" style="width: 300px;">
         </div>
         <div class="col">
           <p class="price">Price: <%= data.price %></p>
@@ -28,17 +28,10 @@
                         <div class="container">
                           <div class="row">
                             <div class="col-3">
-                              <div class="avatar">
-                                <img src="/upload/<%=datas.image %>" alt="User Avatar" class="rounded-circle">
-                              </div>
+                             
                             </div>
                             <div class="col-9">
-                              <div class="user-info">
-                                <a class="user-profile"style="color: black; text-decoration: none;"href="/userprofile">Userprofile</a>
-                                <p class="user-name"><%=datas.name %></p>
-                                <p class="user-email"><%= datas.email %></p>
-                                <p class="user-phone"><%= datas.phone %></p>
-                              </div>
+                              
                             </div>
                           </div>
                         </div>

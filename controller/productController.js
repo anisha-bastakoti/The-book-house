@@ -16,11 +16,12 @@ const getAllProducts = async (req, res) => {
 
   const products = await apiFeature.query;
   console.log(products);
-  const categories = ['Spiritual', 'Frictional', 'Nonfrictional','TextBook','Notebook'];
+  const categories = ['Spiritual', 'Frictional', 'Nonfrictional','Textbook','Notebook'];
   const searchQuery = req.query.keyword;
   let query = {};
 
   if (searchQuery) {
+    
     query = {
       $or: [
         { name: { $regex: searchQuery, $options: 'i' } },
@@ -34,7 +35,7 @@ const getAllProducts = async (req, res) => {
     productCount,
     resultPerPage,
     category:categories,
-     query:searchQuery,
+     match:searchQuery,
   
   });
   
@@ -101,6 +102,20 @@ const add_product=async(req,res)=>{
     console.log(error);
   }
 };
+//get display product
+const getProduct=async(req,res)=>{
+  try{
+      // Fetch all products from the database
+      const products = await Product.find()
+      
+      console.log(products)
+   // Return the products as a response
+  res.render('productManger',{ success: true, data: products,});
+
+  }catch(error){
+      res.status(400).send({sucess:false,msg:error.message});
+  }
+}
  const updateProduct = async (req, res) => {
   try {
     let id = req.params._id.replace(':', '');
@@ -125,9 +140,9 @@ const add_product=async(req,res)=>{
       await product.save();
       console.log(product);
 
-      res.status(200).send({ success: true, msg: "Product updated successfully", product });
+      res.render('editproduct',{product: product });
     } else {
-      res.status(404).send({ success: false, msg: "Product not found" });
+      res.render('editproduct',{ success: false, msg: "Product not found" });
     }
   } catch (error) {
     console.log(error);
@@ -143,9 +158,9 @@ const deleteProduct = async (req, res) => {
     const deletedProduct = await Product.findByIdAndRemove(id);
     
     if (deletedProduct) {
-      res.status(200).send({ success: true, msg: "Product deleted successfully" });
+      res.redirect('productManger',{ success: true, msg: "Product deleted successfully" });
     } else {
-      res.status(404).send({ success: false, msg: "Product not found" });
+      res.redirect('productManger',{ success: false, msg: "Product not found" });
     }
   } catch (error) {
     console.log(error);
@@ -155,7 +170,7 @@ const deleteProduct = async (req, res) => {
 
   module.exports = {
     add_product,getAllProducts,
-    getProductDetail,
+    getProductDetail,getProduct,
     updateProduct,deleteProduct,singleProduct
   };
 

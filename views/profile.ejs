@@ -1,0 +1,77 @@
+<section class="vh-100 d-flex align-items-center justify-content-center" style="background-color:#ECBADB;">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Navigation links -->
+          <div class="d-flex justify-content-between mb-3" style="font-size: 20px;">
+            <a href="/" class="btn btn-primary" style="font-size: 20px;"> Home</a>
+            <a href="/productManger" class="btn btn-primary" style="font-size: 20px;">Product</a>
+            <a href="/logout" class="btn btn-danger"style="font-size: 20px;">Logout</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h1 class="card-title">Welcome to our website<br><br><%= username %></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<style>
+    .vh-100 {
+  min-height: 100vh;
+}
+
+.d-flex.align-items-center.justify-content-center {
+  height: 100%;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
+.btn-primary.form-label {
+  
+  color: black;
+  margin-top: 20px;
+}
+
+.btn-primary.form-label a {
+  text-decoration: none;
+  border-color: black;
+  color: black;
+}
+.d-flex.justify-content-between.mb-3 {
+  justify-content: space-between;
+ 
+}
+
+.d-flex.justify-content-between.mb-3 a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: black;
+  
+}
+
+.d-flex.justify-content-between.mb-3 a:not(:last-child) {
+  margin-right: 50px;
+  font-size: medium;
+}
+
+</style>  

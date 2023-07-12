@@ -1,68 +1,104 @@
-<section class="cart py-16">
-    <% if(session.cart) { %>
-    <div class="order container mx-auto xl:w-1/2">
-        <div class="flex items-center border-b border-gray-300 pb-4">
-            <img src="/img/cart-black.png" alt="">
-            <h1 class="font-bold ml-4 text-2xl">Order summary</h1>
-        </div>
-        <div class="pizza-list">
-            <% for(let pizza of Object.values(session.cart.items)) { %>
-            <div class="flex items-center my-8">
-                <img class="w-24" src="/img/<%= pizza.item.image %>" alt="">
-                <div class="flex-1 ml-4">
-                    <h1><%= pizza.item.name %></h1>
-                    <span><%= pizza.item.size %></span>
-                </div>
-                <span class="flex-1"><%= pizza.qty %> Pcs</span>
-                <span class="font-bold text-lg">₹ <%= pizza.item.price * pizza.qty %></span>
-            </div>
-            <%  } %>
+<%- include('./partial/meta') %>
+<%- include('./partial/home') %>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-bootstrap/0.5pre/js/jquery-1.8.3.min.js">
+<style>
+    img.cpi{
+        width: 100px;
 
-        </div>
-        <hr>
-        <div class="text-right py-4">
-            <div>
-                <span class="text-lg font-bold">Total Amount:</span>
-                <span class="amount text-2xl font-bold ml-2">₹<%= session.cart.totalPrice %></span>
-            </div>
-            <% if(user) { %>
-            <div>
-                <form action="/orders" method="POST" class="mt-12" id="payment-form">
-                    <div class="relative w-1/2 ml-auto mb-4">
-                        <select id="paymentType" name="paymentType" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline">
-                          <option value="cod">Cash on delivery</option>
-                          <option value="card">Pay with card</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                        </div>
-                      </div>
-                    <input name="phone" class="border border-gray-400 p-2 w-1/2 mb-4" type="text"
-                        placeholder="Phone number">
-                    <input name="address" class="border border-gray-400 p-2 w-1/2" type="text" placeholder="Address">
-                    <div class="mt-4">
-                        <div id="card-element"></div>
-                        <button class="btn-primary px-6 py-2 rounded-full text-white font-bold mt-6" type="submit">Order
-                            Now</button>
-                    </div>
-                </form>
-            </div>
-            <% } else { %>
-            <a href="/login"
-                class="inline-block cursor-pointer btn-primary px-6 py-2 rounded-full text-white font-bold mt-6">Login
-                to continue</a>
-            <% } %>
-        </div>
-    </div>
-    <% } else { %>
-    <div class="empty-cart py-16">
-        <div class="container mx-auto text-center">
-            <h1 class="text-3xl font-bold mb-2">Cart Empty 😕</h1>
-            <p class="text-gray-500 text-lg mb-12">You probably haven't ordered a pizza yet. <br>
-                To order a pizza, go to the main page.</p>
-            <img class="w-2/5 mx-auto" src="/img/empty-cart.png" alt="empty-cart">
-            <a href="/" class="inline-block px-6 py-2 rounded-full btn-primary text-white font-bold mt-12">Go back</a>
-        </div>
-    </div>
-    <% } %>
-</section>
+    }
+</style>
+<h1 class="'page-title">My carts</h1>
+<br><br>
+<% if (cart && cart.length > 0) { %>
+    <table class="table table-stripped">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var total=0; %>
+            <% cart.forEach(product => { %>
+                <% var subtotal = parseFloat(product.qty * product.price).toFixed(2); %>
+               <% total+=+subtotal %>
+                <tr>
+                    <td><img class ='cpi'src="<%= product.Image %>" alt=""></td>
+                    <td><%= product.name %></td>
+                    <td><%= product.qty %></td>
+                    <td><%= product.price %></td>
+                    <td>
+                        <a href="/update/<%= product.title %>?action=add">+</a>
+                        <a href="/update/<%= product.title %>?action=sub">-</a>
+                        <a href="/update/<%= product.title %>?action=delete">clear</a>
+                    </td>
+                    <td><%= subtotal %></td>
+                </tr>
+                
+            <% }) %>
+       <tr>
+        <td colspan="6" align="right"><b>Total:</b>Rs<%= parseFloat(total).toFixed(2) %> </td>
+       </tr>
+       <tr>
+        <td colspan="4" align="right">
+          <a  class=" clearcart btn btn-danger" href="/carts/clear">Clear</a>
+        </td>
+        <td colspan="4" align="right">
+            <a  class="btn btn-primary" href=" ">order now</a>
+          </td>
+       </tr>
+       
+        </tbody>
+    </table>
+<!-- payment -->
+
+<form method='post' action='https://www.sandbox.paypal.com/cgi-bin/webscr' method="post">
+    <input type="hidden" name="cmd" value="_cart">
+    
+    <input type="hidden" name="upload" value="1">
+    <% var num=0; %>
+    <% cart.forEach(p => { %>
+   <% num++ %>
+   <input type="hidden" name="item_name_<%=  num%>" value="<%=p.title  %>">
+   <input type="hidden" name="amount_name_<%= num %>" value="<%=p.price  %>">
+   <input type="hidden" name="quantity_name_<%= num %>" value="<%=p.qty  %>">
+    <% }); %>
+    
+    <input type="hidden" name="business" value="jultranet-facilitatoe@gmail.com">
+       <input type="hidden" name="currency_code" value="USD">
+       <input type="hidden" name="amount" value="<%= total %>"> 
+    <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" 
+    name="submit">
+    
+    </form>
+
+
+
+
+
+
+
+
+<!---->
+    
+    <form  class ="pp" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_cart">
+        <input type="hidden" name="upload" value="1">
+       
+        
+<% } else { %>
+    <h1 class="text-center">Your cart is empty</h1>
+<% } %>
+<script>
+    $(function(){
+        $('a.clearcart').on('click',function(){
+            if(!confrim('confirm deletion'))
+            return false
+        })
+
+    })
+</script>

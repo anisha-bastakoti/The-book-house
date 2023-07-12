@@ -219,6 +219,20 @@ req.flash('message'," now you can login ")
   return res.status(400).send('An error occurred');
 }
    }
+
+   //myprofile
+   const getProfile=async(req,res)=>{
+    try {
+      const recentlyLoggedInUsers = await Register.find({}, 'name ,image,phone,email').sort({ createdAt: -1 });
+      const username = recentlyLoggedInUsers[0].name;
+      console.log(username);
+      res.render('profile',{ success: true, message: "Recently logged in user retrieved successfully", username });
+    } catch (error) {
+      console.log(error);
+    }
+  
+    }
+      
 // Add reviews and ratings for Products
 const createProductReviews = (async (req, res, next) => {
   const { rating, comment, userId } = req.body;
@@ -310,5 +324,5 @@ const deleteReview = (async(req, res, next)=>{
   })
 //for verying register
 module.exports ={register,
-  login,sendEmail,verifyOtp,
+  login,sendEmail,verifyOtp,getProfile,
   deleteReview,getAllReviews,createProductReviews};

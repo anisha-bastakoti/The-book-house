@@ -17,7 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
       <form class="form-inline my-2 my-lg-0">
-       <form action="/products?keyword=<%=query%>" method="GET">
+       <form action="/products?keyword=<%=match%>" method="GET">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -34,15 +34,25 @@
           <option value="Spiritual">Spiritual</option>
           <option value="Frictional">Frictional</option>
           <option value="Nonfrictional">Nonfrictional</option>
+          <option value="Textbook">Textbook</option>
+          <option value="Notebook">Notebook</option>
           <!-- Add more options as needed -->
         </select>
       <li class="nav-item active">
-        <a class="nav-link" href=" ">Carts
+        <a class="nav-link" href="carts/checkout">Carts
+          <% if (cart && cart.length > 0) { %>
+            <span class="badge badge-pill badge-primary"><%= cart.length %></span>
+        <% } else { %>
+            <span class="badge badge-pill badge-primary">0</span>
+        <% } %>
         </a>
             
       </li>
       <li class="nav-item active">
           <a class="nav-link " href="/myprofile ">MyProfile</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link " href="/selleraccount ">sellerAccount</a>
         </li>
       <li class="nav-item active">
         <a class="nav-link " href=" ">Logout</a>
@@ -81,9 +91,11 @@
                 <a href="/products/<%= product._id %>">
                   <button type="submit" class="btn btn-primary">View</button>
                 </a>
-                <a href=" ">
-                  <button  data-pizza="<%JSON.stringify(product) %>"class="add-to-cart" type="submit" class="btn btn-primary">Add to Cart</button>
-                </a>
+
+                <form action="carts/addtocarts/<%= product._id %>" method="get">
+          
+                  <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
               </div>   
             </div>
           </div>
@@ -91,25 +103,9 @@
         <% }) %>
       </div>
       <!-- search product-->
-      <% if (query) { %>
-        <div class="container py-5">
-          <% if (match.length > 0) { %>
-            <div class="row">
-              <% match.forEach(product => { %>
-                <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
-                  <!-- Product card code here -->
-                  <h5><%= product.name %></h5>
-                  <p>Author: <%= product.author %></p>
-                  <!-- Additional product details or HTML code here -->
-                </div>
-              <% }) %>
-            </div>
-          <% } else { %>
-            <h3>No products found for '<%= query %>'</h3>
-          <% } %>
-        </div>
-      <% } %>
+
       
+     
       <!-- page -->
       <% if (productCount > resultPerPage) { %>
         <div class="pagination">

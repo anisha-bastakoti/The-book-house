@@ -33,12 +33,13 @@ is_verified: {
     type: String,
     
   },
-  otp:{
-    type:String,
+  otp: {
+    type: String,
     required: true
   }
-     
- });
+}, { timestamps: true });
+
+  
  
  //we need to create collection 
  const Register= new mongoose.model("LOGreg",RegisterSchema);

@@ -1,0 +1,56 @@
+<%- include('./partial/meta') %>
+<%- include('./partial/home') %>
+<h2 class="page-title">Products</h2>
+<a href="/addproduct" class="btn"> Addproduct</a>
+<br><br>
+<table class=" table table-stripped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>image</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% data.forEach(product => { %>
+        <tr>
+            <td><%= product.name %></td>
+            <td><%= product.price %></td>
+            <td><%= product.pdescription %></td>
+            <td><%= product.author %></td><form action="/products/update/<%= product._id %>" method="POST"></form>
+            <td><img src="/productImage/<%= product.image %>"style="width: 100px; height: auto;"></td>
+            <td>
+              
+                <a href="/products/update/<%= product._id %>">Edit</a></td>
+            </form>
+            <td>
+                <form action="/products/delete/<%= product._id %>" method="POST">
+                    <!-- Add a hidden input field to specify the request method as DELETE -->
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                  </form>
+                  
+                
+                  
+               
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
+<style>
+    .btn{
+  color: #fff;
+  background-color:#ECBADB;
+  border-color:#ECBADB;
+}
+
+.btn :hover {
+  background-color: #ECBADB;
+  border-color: #ECBADB;
+}
+</style>
+ 

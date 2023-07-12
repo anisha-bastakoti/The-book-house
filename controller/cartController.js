@@ -1,41 +1,96 @@
-const Cart = require('../model/cartModel')
+
 const Product = require('../model/productModel');
-const getCart=async(req,res,next)=>{
-  const productId = req.params.id.replace(':', '');
-const cart = new Cart(req.session.cart ? req.session.cart : {item:{}});
+const getCart = async (req, res) => {
+  try {
+    const slug = req.params._id.replace(':', '');
+    const product = await Product.findOne({ _id: slug });
 
-try {
-  const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).send({ success: false, msg: "Product not found" });
+    }
 
-  if (!product) {
-    res.redirect('/products');
-    //res.status(404).send({ success: false, message: 'Product not found' });
-    return;
+    if (typeof req.session.cart =='undefined') {
+      req.session.cart = [];
+    }
+
+    const cart = req.session.cart;
+    let newItem = true;
+
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].title === slug) {
+        cart[i].qty++;
+        newItem = false;
+        break;
+      }
+    }
+
+    if (newItem) {
+      cart.push({
+        title: slug,
+        name:product.name,
+        qty: 1,
+        price: parseFloat(product.price).toFixed(2),
+        Image: '/productImage/'+product.image
+      });
+    }
+
+    console.log(req.session.cart);
+    res.redirect('/products')
+    //res.send({ success: true, msg: "Added to cart successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ success: false, msg: "An error occurred" });
   }
-  cart.add(product, product._id);
-  req.session.cart = cart; 
-  // Update the session cart data
-  console.log(req.session.cart);
-  res.redirect('/products',200,{cart:cart});
-  //res.send({ success: true,message:"sucessfully added to cart" });
-} catch (err) {
-  console.error(err);
-  res.status(500).send({ success: false, message: 'An error occurred' });
+};
+
+//checkoutpage
+const checkOut= async(req,res)=>{
+  if(req.session.cart && req.session.cart.lenth==0){
+    delete req.session.cart
+    res.redirect('/carts/checkout');
+  }else{
+ res.render('cart',{
+  title:'checkout',
+  cart:req.session.cart
+ })
 }
-
-
-}   
-//getcheckoutpage
-const shoppingCart= async(req,res)=>{
-  if(!req.session.cart){
-    res.render('checkout',)
+}
+//updatepage
+const updateCart=async(req,res)=>{
+  var slug = req.params._id.replace(':', '');
+  var cart=req.session.cart;
+  var action= req.query.action;
+   for(var i=0;i<cart.length;i++){
+    if(cart[i].title===slug){
+      switch(action){
+        case"add":
+        cart[i].qty++;
+        break;
+        case"sub":
+        cart[i].qty--;
+        break;
+        case"delete":
+        cart.splice(i,1);
+        if(cart.length==0)delete req.session.cart;
+        break;
+        default:
+          console.log('update problem  ')
+          break;
+      }
+      break;
+    }
+   }
+   res.redirect('/carts/checkout')
+} 
+//delete cart
+const deleteCart=async(req,res)=>{
+  try{
+delete req.session.cart;
+res.redirect('/carts/checkout')
+  }catch(error){
+console.log(error)
   }
-var cart= new Cart(req.session.cart);
-res.render('checkout',{sucess:true,product:cart.generateArray().totalprice})
-console.log(cart)
 }
- 
-
 module.exports = {
-shoppingCart,getCart
+checkOut,getCart,updateCart,deleteCart
 };

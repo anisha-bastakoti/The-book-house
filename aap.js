@@ -8,6 +8,8 @@ require('express-messages');
  require('dotenv').config();
  const expressvalidator= require('express-validator');
 
+ const methodOverride = require('method-override')
+ app.use(methodOverride('_method'));
  //mongodb connection 
  const mongoose = require('mongoose');
  //databaseconnection
@@ -55,8 +57,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
-//requiring routes
-require('./routes/web')(app)
+
 //setting ejs 
 app.set('view engine','ejs')
 
@@ -65,10 +66,14 @@ app.set('view engine','ejs')
 app.use(flash());
 app.get('*',function(req,res,next){
 res.locals.session=req.session;
-next();
+next(); 
 })
 app.get('*',function(req,res,next){
-  res.locals.title=req.session.title;
+  res.locals.cart=req.session.cart;
+  next(); 
+  })
+app.get('*',function(req,res,next){
+  res.locals.products=req.session.products;
   next();
   })
   
@@ -89,10 +94,7 @@ next();
 //set global variable error
 app.locals.errors= null;
 //for user details
-app.use(function(req,res,next){
-  res.locals.user=req.user;
-  next();
-})
+
 //express validator middleware
 app.use(expressvalidator({
  errorFormatter:function(param,msg,value){
@@ -146,10 +148,12 @@ app.get('/userprofile',(req,res)=>{
   res.render('userprofile');
   
 });
+
 app.get('/addpages',(req,res)=>{
   res.render('addpage');
 
 })
+
 app.get('/verifyotp',(req,res)=>{
   res.render('otp');
 
@@ -171,7 +175,8 @@ app.use(morgan('tiny'));
 
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
-
+const cartRoute=require('./routes/cartRoute');
+app.use('/',cartRoute);
 const myprofileRoute= require('./routes/profileRoute');
 app.use('/',myprofileRoute);
 const productroute=require('./routes/productRoute');
