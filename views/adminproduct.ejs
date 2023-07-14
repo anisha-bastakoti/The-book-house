@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delete Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">All Products</h1>
+    <%- include('./partial/adminfooter') %>
+    
+    <!-- Product List -->
+    <section>
+      <h2>Product List</h2>
+      <% if (products.length === 0) { %>
+        <p>No products found.</p>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Author</th>
+              <th>Location</th>
+              <th>Delivery</th>
+              <th>Expiredate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(product => { %>
+              <tr>
+                <td><%= product._id %></td>
+                <td><%= product.name %></td>
+                <td><%= product.author %></td>
+                <td><%= product.location %></td>
+                <td><%= product.delivery %></td>
+                <td><%= product.expiredate %></td>
+                <td>
+                  <form action="/admin/delete/product/<%= product._id %>?_method=DELETE" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

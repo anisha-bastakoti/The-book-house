@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0/css/bootstrap.min.css">
+
+<section class="orders light-section">
+  <div class="container mx-auto pt-4">
+    <h1 class="font-bold text-lg mb-4">All Orders detail</h1>
+    <% if (orders.length === 0) { %>
+      <p>No orders found.</p>
+    <% } else { %>
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Orders</th>
+          <th scope="col">Name</th>
+          <th scope="col">Address</th>
+          <th scope="col">phone</th>
+          <th scope="col">City</th>
+          <th scope="col">Country</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">Product Qty</th>
+          <th scope="col">Total Price</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach((order) => { %>
+        <tr>
+          <td><%= order._id %></td>
+          <td><%= order.name %></td>
+          <td><%= order.address %></td>
+          <td><%= order.phone %></td>
+          <td><%= order.city %></td>
+          <td><%= order.country %></td>
+          <td>
+            <% cartItems.forEach((item) => { %>
+              <%= item.name %><br>
+            <% }); %>
+          </td>
+          <td>
+            <% cartItems.forEach((item) => { %>
+              <%= item.qty %><br>
+            <% }); %>
+          </td>
+          <td>
+            <% var total = 0; %>
+            <% cartItems.forEach((item) => { %>
+              <% total += parseFloat(item.qty * item.price); %>
+            <% }); %>
+            <%= total.toFixed(2) %>
+          </td>
+          <td>
+            <form action="/admin/orders/<%= order._id %>/status" method="POST">
+              <select name="status">
+                <option value="pending" <% if (order.status === 'pending') { %>selected<% } %>>Pending</option>
+                <option value="shipped" <% if (order.status === 'shipped') { %>selected<% } %>>Shipped</option>
+                <option value="delivered" <% if (order.status === 'delivered') { %>selected<% } %>>Delivered</option>
+                <!-- Add more status options as needed -->
+              </select>
+              <button type="submit">Update</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <% } %>
+  </div>
+</section>

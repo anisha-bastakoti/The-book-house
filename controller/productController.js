@@ -107,8 +107,13 @@ const getProduct=async(req,res)=>{
   try{
       // Fetch all products from the database
       const products = await Product.find()
+      if (!products || products.length === 0) {
+        // Handle case when no products are found
+        res.render('productManger', { products: [] });
+      }
       
-      console.log(products)
+        console.log(products)
+        
    // Return the products as a response
   res.render('productManger',{ success: true, data: products,});
 
