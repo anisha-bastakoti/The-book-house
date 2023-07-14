@@ -116,6 +116,8 @@ const getProduct=async(req,res)=>{
       res.status(400).send({sucess:false,msg:error.message});
   }
 }
+//get edit product 
+
  const updateProduct = async (req, res) => {
   try {
     let id = req.params._id.replace(':', '');

@@ -39,7 +39,7 @@ const getCart = async (req, res) => {
     //res.send({ success: true, msg: "Added to cart successfully" });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ success: false, msg: "An error occurred" });
+   // res.send({ success: false, msg: "An error occurred" });
   }
 };
 

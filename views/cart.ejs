@@ -48,39 +48,13 @@
           <a  class=" clearcart btn btn-danger" href="/carts/clear">Clear</a>
         </td>
         <td colspan="4" align="right">
-            <a  class="btn btn-primary" href=" ">order now</a>
+            <a  class="btn btn-primary" href="shippingdetail">order now</a>
           </td>
        </tr>
        
         </tbody>
     </table>
 <!-- payment -->
-
-<form method='post' action='https://www.sandbox.paypal.com/cgi-bin/webscr' method="post">
-    <input type="hidden" name="cmd" value="_cart">
-    
-    <input type="hidden" name="upload" value="1">
-    <% var num=0; %>
-    <% cart.forEach(p => { %>
-   <% num++ %>
-   <input type="hidden" name="item_name_<%=  num%>" value="<%=p.title  %>">
-   <input type="hidden" name="amount_name_<%= num %>" value="<%=p.price  %>">
-   <input type="hidden" name="quantity_name_<%= num %>" value="<%=p.qty  %>">
-    <% }); %>
-    
-    <input type="hidden" name="business" value="jultranet-facilitatoe@gmail.com">
-       <input type="hidden" name="currency_code" value="USD">
-       <input type="hidden" name="amount" value="<%= total %>"> 
-    <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" 
-    name="submit">
-    
-    </form>
-
-
-
-
-
-
 
 
 <!---->

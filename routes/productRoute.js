@@ -34,7 +34,7 @@ const productController=require('../controller/productController');
 productRoute.post('/addproduct',upload.single('image'),productController.add_product);
 productRoute.get('/productmanger', productController.getProduct);
 productRoute.get('/products', productController.getAllProducts);
-productRoute.put('/products/update/:_id',productController.updateProduct);
+productRoute.post('/products/update/:_id',productController.updateProduct);
 productRoute.delete('/products/delete/:_id',productController.deleteProduct);
 productRoute.get('/products/:_id' ,productController.singleProduct);
 

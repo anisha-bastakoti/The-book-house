@@ -153,7 +153,9 @@ app.get('/addpages',(req,res)=>{
   res.render('addpage');
 
 })
-
+app.get('/carts/shippingdetail',(req,res)=>{
+  res.render('shippingdetail')
+})
 app.get('/verifyotp',(req,res)=>{
   res.render('otp');
 
@@ -172,7 +174,10 @@ app.use(morgan('tiny'));
 //getting user detail
 
 //routes
-
+const adminLogin=require('./routes/adminlogin');
+app.use('/admin',adminLogin);
+const ShippingRoute=require('./routes/shppingRoute');
+app.use('/',ShippingRoute);
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute);
 const cartRoute=require('./routes/cartRoute');
