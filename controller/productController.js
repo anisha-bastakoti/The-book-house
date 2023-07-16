@@ -103,82 +103,93 @@ const add_product=async(req,res)=>{
   }
 };
 //get display product
-const getProduct=async(req,res)=>{
-  try{
-      // Fetch all products from the database
-      const products = await Product.find()
-      if (!products || products.length === 0) {
-        // Handle case when no products are found
-        res.render('productManger', { products: [] });
-      }
-      
-        console.log(products)
-        
-   // Return the products as a response
-  res.render('productManger',{ success: true, data: products,});
+const getProduct = async (req, res) => {
+  try {
+    // Fetch all products from the database
+    const products = await Product.find();
+    
+    if (!products || products.length === 0) {
+      // Handle case when no products are found
+      return res.render('productManger', { products: [] });
+    }
 
-  }catch(error){
-      res.status(400).send({sucess:false,msg:error.message});
+    console.log(products);
+
+    // Render the productManger view with the products data
+    res.render('productManger', { products: products });
+  } catch (error) {
+    res.status(400).send({ success: false, msg: error.message });
   }
-}
+};
+
 //get edit product 
 
- const updateProduct = async (req, res) => {
+const updateProduct = async (req, res) => {
   try {
-    let id = req.params._id.replace(':', '');
-    const product = await Product.findById(id); // Add 'await' to wait for the asynchronous operation to complete
+    const productId = req.params.id;
+    const { name, pdescription, author, category, delivery, price } = req.body;
 
-    if (product != null) { 
-      // Check if the product exists
-      product.name=req.body.name;
-      product.pdescription=req.body.pdescription;
-      product.location=req.body.location;
-      product.author=req.body.author;
-      product.delivery=req.body.delivery;
-      product.price =req.body.price;
-      product.expiredate =req.body.expiredate;
-      product.image =req.body.image;
-      product.category=req.body.category;
-      // Add more properties as needed
+    // Find the product by ID
+    const product = await Product.findById(productId);
 
-      console.log("Updated product:", product);
-
-      // Save the updated product
-      await product.save();
-      console.log(product);
-
-      res.render('editproduct',{product: product });
-    } else {
-      res.render('editproduct',{ success: false, msg: "Product not found" });
+    // Check if the product exists
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
     }
+
+    // Update the product fields
+    product.name = name;
+    product.description = pdescription;
+    product.author = author;
+    product.category = category;
+    product.delivery = delivery;
+    product.price = price;
+
+    // Save the updated product
+    const updatedproduct =await product.save();
+
+    res.redirect('/productManger?success=true&data=' + encodeURIComponent(JSON.stringify(updatedproduct)));
+
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ success: false, msg: "Internal server error" });
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
-}
+};
+
+
 //deleting the product
 const deleteProduct = async (req, res) => {
   try {
-    const id = req.params._id.replace(':', '');
-    
-    // Find the product by ID and remove it
-    const deletedProduct = await Product.findByIdAndRemove(id);
-    
-    if (deletedProduct) {
-      res.redirect('productManger',{ success: true, msg: "Product deleted successfully" });
-    } else {
-      res.redirect('productManger',{ success: false, msg: "Product not found" });
-    }
+    const productId = req.params._id; // Corrected parameter name
+
+    // Delete the product from the database using the productId
+    await Product.findByIdAndDelete(productId);
+
+    res.redirect('/productManger'); // Redirect to the admin dashboard or any other page after successful deletion
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ success: false, msg: "Internal server error" });
+    console.error('Error:', error); // Add this line for debugging
+    res.status(500).send({ success: false, msg: error.message });
   }
-}
+};
+const editProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Retrieve the product from the database using the productId
+    const product = await Product.findById(productId);
+
+    // Render the edit product form or perform any necessary logic
+    res.render('editProduct', { product });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send({ success: false, msg: error.message });
+  }
+};
 
   module.exports = {
     add_product,getAllProducts,
     getProductDetail,getProduct,
-    updateProduct,deleteProduct,singleProduct
+    updateProduct,deleteProduct,singleProduct,editProduct
   };
 
 

@@ -8,7 +8,6 @@
         <div class="d-flex justify-content-between mb-3">
           <a href="/" class="btn btn-primary"> Home</a>
           <a href="/addproduct" class="btn btn-primary">Add Product</a>
-          <a href="#" class="btn btn-primary">Chat Now</a>
           <a href="/logout" class="btn btn-danger">Logout</a>
         </div>
       </div>
@@ -20,9 +19,16 @@
           <div class="card-body">
             <h5 class="card-title"> userprofile</h5>
             <form action="/userprofile" method="post"></form>
-              <div class="avatar">
-                  <img src="/upload/<%= users.image %>" alt="" class="round-circle">
-              </div>
+            <div class="avatar">
+              <% if (users && users.image) { %>
+                <img src="/upload/<%= users.image %>" alt="" style="width: 80px;">
+              <% } else { %>
+                <!-- Provide a default image or placeholder if the user or image is not available -->
+                <img src="/default-avatar.png" alt="" style="width: 80px;">
+              <% } %>
+            </div>
+            
+             
              
               <div class="mb-3">
                 <label class="form-label">Name <%= users.name%></label>

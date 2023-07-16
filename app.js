@@ -10,6 +10,7 @@ require('express-messages');
 
  const methodOverride = require('method-override')
  app.use(methodOverride('_method'));
+
  //mongodb connection 
  const mongoose = require('mongoose');
  //databaseconnection
@@ -154,7 +155,12 @@ app.get('/addpages',(req,res)=>{
 
 })
 app.get('/carts/shippingdetail',(req,res)=>{
+  
   res.render('shippingdetail')
+})
+app.get("/payment_success",(req,res)=>{
+  console.log("req.query",req.query);
+  res.render("payment_success",{query:req.query})
 })
 app.get('/verifyotp',(req,res)=>{
   res.render('otp');

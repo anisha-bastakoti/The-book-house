@@ -219,7 +219,22 @@ req.flash('message'," now you can login ")
   return res.status(400).send('An error occurred');
 }
    }
-
+   const userprofile = async (req, res) => {
+    try {
+      // Fetch user data from the database
+      const user = await imageSchema.findById(req.user.id);
+  
+      if (!user) {
+        // Handle case when user is not found
+        return res.status(404).send('User not found');
+      }
+  res.send({sucess:true,user})
+      //res.render('userprofile', { users:user });
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  };
+  
    //myprofile
    const getProfile=async(req,res)=>{
     try {
@@ -324,5 +339,5 @@ const deleteReview = (async(req, res, next)=>{
   })
 //for verying register
 module.exports ={register,
-  login,sendEmail,verifyOtp,getProfile,
+  login,sendEmail,verifyOtp,getProfile,userprofile,
   deleteReview,getAllReviews,createProductReviews};

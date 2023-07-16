@@ -2,7 +2,7 @@
   "name": "clotheshop",
   "main": " index.js",
   "scripts": {
-    "dev": "nodemon aap.js"
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
