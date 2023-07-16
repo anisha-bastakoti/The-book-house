@@ -2,8 +2,22 @@
     <div class="navbar">
     <a href="/">home</a>
     <a href="categories">categories</a>
-    <a href="#contact">contact</a>
-    <a href="./login">login</a>
+    <a href="/contact">contact</a>
+   
+    
+
+    </div>
+    <div  style="float:right !important;">
+    <% if (userDetail!==undefined){ %>
+      <a href="/myprofile"> <%= userDetail.name %> </a> 
+
+      <a href="/logout"> Logout </a> 
+    <% } else { %>
+      <a href="./login">login</a>
+      <% } %>
+
+
+
    
     
   </div>

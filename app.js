@@ -8,6 +8,7 @@ require('express-messages');
  require('dotenv').config();
  const expressvalidator= require('express-validator');
 
+
  const methodOverride = require('method-override')
  app.use(methodOverride('_method'));
 
@@ -65,27 +66,18 @@ app.set('view engine','ejs')
 //for displaying error msg
 
 app.use(flash());
+
 app.get('*',function(req,res,next){
-res.locals.session=req.session;
-next(); 
-})
-app.get('*',function(req,res,next){
+  console.log("session --------> ",req.session);
+  res.locals.session=req.session;
   res.locals.cart=req.session.cart;
-  next(); 
-  })
-app.get('*',function(req,res,next){
   res.locals.products=req.session.products;
+  res.locals.data=req.session.data;
+  res.locals.users=req.session.users;
   next();
   })
   
-      app.get('*',function(req,res,next){
-        res.locals.users=req.session.users;
-        next();
-        })
-        app.get('*',function(req,res,next){
-          res.locals.data=req.session.data;
-          next();
-          }) 
+    
     
 //flashing message
 app.use(function(req,res,next){
@@ -125,18 +117,32 @@ app.use('/', express.static(__dirname + "/public/" + '/upload'));
 
 //register and login page routes
 app.get('/',(req,res)=>{
-  res.render('homepage');
+  const userDetail = req.session.userDetail;
+  res.render('homepage',{userDetail});
 });
 app.get('/categories',(req,res)=>{
   res.render('categories');
 });
 
+app.get("/logout",(req,res)=>{
+  req.session.destroy(function(err) {
+    res.redirect("/");
+ })
+  
+
+})
+
+
+// For UI 
 app.get('/login',(req,res)=>{
     res.render('login');
 }); 
 app.get('/Register',(req,res)=>{
     res.render('register');
 });
+
+//End of Auth Route UI
+
  app.get('/sellerAccount',(req,res)=>{
       res.render('sellerAccount');
       
@@ -173,6 +179,17 @@ app.get('/addcategory',(req,res)=>{
   res.render('categories');
 });
 
+app.get("/chat_message",(req,res)=>{
+  const userDetail = req.session.userDetail;
+  
+  if(!userDetail) res.render('templates/unauthorized_user');
+  res.render('chat_message',{userDetail});
+})
+
+
+app.get("/contact",(req,res)=>{
+  res.render("contact");
+})
 
 //for middleware
 app.use(morgan('tiny'));
@@ -201,9 +218,26 @@ app.use('/',catRoute);
 
 
 
+const http = require("http").createServer(app);
+
+const io = require("socket.io")(http);
+
+io.on("connection",(socket)=>{
+  console.log("connection established")
+
+  socket.on("message",(msg)=>{
+    console.log("message agyo : "+msg);
+
+    socket.broadcast.emit("message",msg);
+  })
+});
+
+
 //for middleware
 const PORT= process.env.PORT || 3000
-    app.listen(PORT,()=>{
+    http.listen(PORT,()=>{
         console.log("server stated at port "+PORT );
     });
+
+   
 

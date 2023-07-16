@@ -148,8 +148,16 @@ async function login(req, res) {
       
      userEmail.is_verified=true;
      await userEmail.save();
+     console.log("logged in vako user email : ",userEmail);
+
     
   if (passwordMatch) {
+    //user is valid.
+    //save data to session.
+    
+    req.session.userDetail = {name:userEmail.name, email:userEmail.email};
+    console.log("set vako session ",req.session.userDetail);
+
     // Create token
     const token = jwt.sign(
       { user_id: userEmail._id, email },
@@ -237,11 +245,16 @@ req.flash('message'," now you can login ")
   
    //myprofile
    const getProfile=async(req,res)=>{
+
+    if(!req.session.userDetail)
+    {
+     
+      res.render('templates/unauthorized_user')
+    }
+
     try {
-      const recentlyLoggedInUsers = await Register.find({}, 'name ,image,phone,email').sort({ createdAt: -1 });
-      const username = recentlyLoggedInUsers[0].name;
-      console.log(username);
-      res.render('profile',{ success: true, message: "Recently logged in user retrieved successfully", username });
+     
+      res.render('profile',{ success: true, message: "Recently logged in user retrieved successfully", userDetail:req.session.userDetail });
     } catch (error) {
       console.log(error);
     }

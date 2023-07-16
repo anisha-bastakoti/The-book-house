@@ -1,5 +1,6 @@
 <%-include('./partial/meta');-%>
 <%-include('./partial/css'); -%>
+<%- include('./partial/chat_msg_box') %>
 
 
 <body>
@@ -12,14 +13,15 @@
         <label for="search-box"><i class="fas fa-search"></i></label>
       </form>
       </div>
+      
     
-      <%-include('./partial/navbar'); -%>
+      <%- include('./partial/navbar',{userDetail})%>
     <!-- bottom navbar ends -->
      <!--home section start-->
 <section class="home" id="home">
   <div class="row">
   <div class="content">
-    <h3>upto 55% offers</h3>
+    <h3>55% offers</h3>
     <p> Lorem ipsum dolor sit amet consectetur adipisicing elit.corrupti sapiente eos evisquam voluptatibus, cum quod.</p>
   <a href="#" class="btn">shopnow</a>
   </div>
