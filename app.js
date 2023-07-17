@@ -207,7 +207,7 @@ const cartRoute=require('./routes/cartRoute');
 app.use('/',cartRoute);
 const myprofileRoute= require('./routes/profileRoute');
 app.use('/',myprofileRoute);
-const productroute=require('./routes/productRoute');
+const productroute=require('./routes/product.route');
 app.use('/',productroute);
 const pageRoute= require('./routes/pageRoute');
 app.use('/',pageRoute);

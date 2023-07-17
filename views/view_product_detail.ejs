@@ -50,7 +50,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                      <div class="product-info">
+                      <div class="product-info" style="padding:10px; margin-left:30px;">
                         <div class="product-buttons">
                           <a href="#" class="btn-link" id="descriptionBtn">Description</a>
                           <a href="#" class="btn-link" id="commentBtn">Comment</a>
@@ -64,6 +64,32 @@
                             <li>Author:<%=data.author%></li>
                           </ul>
                         </div>
+                        <!-- Division to list the product reviews -->
+                       <div style="border-top:1px solid #ccc; box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);padding:10px;margin:5px; ">
+<h3>Reviews</h3>
+                    
+                        <% data.reviews.forEach(element => { %>
+
+                        
+                          <div>
+                         <br/>
+                          <label for="">Name : </label><b><%= element.name %></b><br/>
+                          <label for="">Rating : </label><b><%= Array(element.rating).fill("⭐️",0,element.rating).map(e=>e).toString().replaceAll(","," "); %></b><br/>
+                          <label for="">Comment : </label><b><%= element.comment %></b>
+                          
+                          <hr/>
+                         
+                          </div>
+                        <% }) %>
+
+
+
+                       </div>
+
+                       <!-- Section to add review by user-->
+                       <section>
+
+                       </section>
                         <div class="comment-section" id="commentSection">
                             <h3>User Comment</h3>
                             <div id="commentContent"></div>
