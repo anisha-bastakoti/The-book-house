@@ -20,7 +20,13 @@ const shippingScheme= new  mongoose.Schema({
     ,  country:{
         type:String,
         required:true
-    }
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'completed', 'deleted'],
+        default: 'pending',
+      },
+
     
 })
 module.exports = mongoose.model("shipping",shippingScheme);

@@ -21,7 +21,7 @@ const shippingMethod=async(req,res)=>{
        // Save the shipping information to MongoDB
       const detail= await newShipping.save();
       const orderLength = detail.order ? detail.order.length : 0;
-
+      req.session.orderId = detail._id;
       // Send a response back to the client
       //const orderLength = detail.order.length;
        // Send a response back to the client

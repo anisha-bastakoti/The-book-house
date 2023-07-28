@@ -6,48 +6,6 @@
 <a href="/addproduct" class="btn">Add a product</a>
 <br><br> 
 
-<% if (products.length === 0) { %>
-    <p>No products found.</p>
-<% } else { %>
-    <table class="table table-striped"> <!-- Corrected table class name to "table-striped" -->
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Author</th>
-                <th>Image</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% products.forEach(product => { %> <!-- Updated variable name from "data" to "products" -->
-                <tr>
-                    <td><%= product.name %></td>
-                    <td><%= product.price %></td>
-                    <td><%= product.pdescription %></td>
-                    <td><%= product.author %></td>
-                    <td><img src="/productImage/<%= product.image %>" style="width: 100px; height: auto;"></td>
-                    <td>
-                        <form action="/products/edit/<%= product._id %>" method="POST">
-                            <input type="hidden" name="_method" value="PUT">
-                            <button type="submit" class="btn btn-danger">Edit</button>
-                          </form>
-                      
-                    </td>
-                    <td>
-                        <form action="/products/delete/<%= product._id %>" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                          </form>
-                          
-                    </td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-<% } %>
 
 <style>
     .btn {

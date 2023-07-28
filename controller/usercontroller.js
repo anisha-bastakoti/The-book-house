@@ -116,7 +116,7 @@ const register = async (req, res) => {
         } else {
           req.flash("message", "Email sent successfully.");
           //req.flash('message','Email sent successfully")
-          res.redirect("/verifyotp");
+    return res.redirect("/verifyotp");
         }
       });
       res.render("otp");

@@ -36,10 +36,15 @@
                 <td><%= product.delivery %></td>
                 <td><%= product.expiredate %></td>
                 <td>
+                  <form action="/products/edit/<%= product._id %>" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    <button type="submit" class="btn btn-danger">Edit</button>
+                  </form>
                   <form action="/admin/delete/product/<%= product._id %>?_method=DELETE" method="POST">
                     <input type="hidden" name="_method" value="DELETE">
                     <button type="submit" class="btn btn-danger">Delete</button>
                   </form>
+
                 </td>
               </tr>
             <% }) %>
@@ -48,7 +53,18 @@
       <% } %>
     </section>
   </div>
-  
+  <style>
+    .btn {
+        color: #fff;
+        background-color: #ECBADB;
+        border-color: #ECBADB;
+    }
+
+    .btn:hover {
+        background-color: #ECBADB;
+        border-color: #ECBADB;
+    }
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

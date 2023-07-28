@@ -12,45 +12,93 @@
         </div>
         <% } %>
       </div>
-      <div class="input-box">
-        <i class="fa-regular fa-envelope"></i>
-        <input type="text" name="email" placeholder="Email Id">
-      </div>
-      <div class="input-box">
-        <i class="fa-sharp fa-solid fa-key"></i>
-        <input type="password" name="password" placeholder="Password" id="myInput">
-        <span class="eye" onclick="togglePasswordVisibility('myInput')">
-          <i id="hide1" class="fa fa-eye"></i>
-          <i id="hide2" class="fa fa-eye-slash"></i>
-        </span>
-      </div>
-      <button type="submit" class="login-btn">LOGIN</button>
+      
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Submit</button>
       <div class="register"> 
         <h1>Don't you have an account?</h1>
         <a href="./register">Register</a>
       </div>
-    </div class="forget">
-        <a href=" ">Forget password</a>
+      <div class="forgot-password"> 
+        <a href="/forgetpassword">forgetpassword</a>
       </div>
     </div>
   </form>
+  <style>body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
   
+  .form-box {
+    background-color: #fff;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #E5F6DF;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
   
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 0;
+  }
   
-  <script>
-    function togglePasswordVisibility(inputId) {
-      var x = document.getElementById(inputId);
-      var y = document.getElementById("hide1");
-      var z = document.getElementById("hide2");
-      if (x.type === 'password') {
-        x.type = "text";
-        y.style.display = "block";
-        z.style.display = "none";
-      } else {
-        x.type = "password";
-        y.style.display = "none";
-        z.style.display = "block";
-      }
-    }
-  </script>
+  .alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #f5c6cb;
+  }
+  
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .register {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .register h1 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .register a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .forgot-password {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  </style>
+  
+
 </body>

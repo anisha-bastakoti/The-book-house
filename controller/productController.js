@@ -156,7 +156,7 @@ const updateProduct = async (req, res) => {
     const updatedproduct = await product.save();
 
     res.redirect(
-      "/productManger?success=true&data=" +
+      "/admin/dashboard/product?success=true&data=" +
         encodeURIComponent(JSON.stringify(updatedproduct))
     );
   } catch (error) {

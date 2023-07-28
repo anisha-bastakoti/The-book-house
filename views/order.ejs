@@ -48,5 +48,66 @@
         <% }); %>
       </tbody>
     </table>
+   
   </div>
+   <form action="/process-shipping" method="POST"></form>
+   <% if (cartitems && cartitems.length > 0) { %>
+    <% var total=0; %>
+    <% cartitems.forEach(product => { %>
+        <% var subtotal = parseFloat(product.qty * product.price).toFixed(2); %>
+       <% total+=+subtotal %>
+    <% }) %>
+    <% } %>
+   
+   
+    <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+      <input type="hidden" name="cmd" value="_cart">
+      <input type="hidden" name="upload" value="1">
+      <input type="hidden" name="business" value="sb-rrk6c26766407@business.example.com">
+       <input type="hidden" name="item_name_1" value="Product Name">
+       <input type="hidden" name="amount_1" value=  <%= parseFloat(total).toFixed(2) %>>
+       <input type="hidden" name="quantity_1" value="1">
+       <input type="hidden" name="return" value="http://localhost:3000/payment_success">
+      
+        <input type="submit" value="Pay with PayPal">
+  
+         </form>
+   
+   
+   
+         <div id="paypal-button-container">
+         
+  
+         </div>
+   
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
+    <script>
+      document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form submission
+     
+  
+        paypal.Buttons({
+    createSubscription(data, actions) {
+      // updatedSubscription, status, and subscriptionId are defined by your code
+      if (updatedSubscription && (status === 'ACTIVE' || status === 'SUSPENDED')) {
+        // if subscription exists, revise it by chaning the plan id
+        return actions.subscription.revise(subscriptionId, {
+          "plan_id": "NEW_SUBSCRIPTION_PLAN_ID"
+        });
+      } else {
+        return actions.subscription.create({
+          'plan_id': 'P-2UF78835G6983425GLSM44MA'
+        });
+      }
+    },
+  
+    onApprove(data) {
+      alert('You have successfully created subscription ' + data.subscriptionID);
+    }
+  }).render('#paypal-button-container');
+      });
+    </script>
+ 
 </section>
+
+

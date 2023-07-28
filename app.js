@@ -46,7 +46,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
+      maxAge: 1300 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
     },
   })
 );
@@ -128,7 +128,14 @@ app.get("/logout",(req,res)=>{
   req.session.destroy(function(err) {
     res.redirect("/");
  })
+})
+
+ app.get("/adminlogout",(req,res)=>{
+  req.session.destroy(function(err) {
+    res.redirect("/admin/login");
+ })
   
+
 
 })
 
@@ -214,6 +221,8 @@ app.use('/',pageRoute);
 const catRoute= require('./routes/categoryRoute');
 const { Auth } = require('two-step-auth');
 app.use('/',catRoute);
+const forgetpasswordRoute= require('./routes/forget-password');
+app.use('/',forgetpasswordRoute);
  
 
 

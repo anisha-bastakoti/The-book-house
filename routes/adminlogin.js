@@ -6,7 +6,6 @@ router.get('/dashboard',adminController.getAminDashboard)
 router.post('/login',adminController.postAdmin)
 router.get('/dashboard/product', adminController.getProduct);
 router.delete('/delete/product/:id', adminController.deleteProduct);
-router.post('/admin/orders/:id/status',adminController.statusChange);
 router.get('/dashboard/orderdetail',adminController.getOrder)
 
 

@@ -57,7 +57,7 @@ html::-webkit-scrollbar-thumb{
 
 .header .header-1{
     display:flex ;
-    background:#E5F6DF;
+    background:#ECBADB;
     justify-content:space-evenly;
     align-items:center;
     padding:1.5rem 9%;
@@ -73,14 +73,14 @@ html::-webkit-scrollbar-thumb{
     margin-bottom:0.5ch;
 } 
 .header .header-1 .logo i {
-    color: var(--#E5F6DF); 
+    color: var(--#ECBADB); 
 }
 .header .header-1 .from-box{
     width:30rem;
     height:5rem;
     border: var(--border);
     overflow: hidden;
-    background:#E5F6DF;
+    background:#ECBADB;
     display:flex;
     align-items: center;
     border-radius: 0.5rem;
@@ -104,7 +104,7 @@ html::-webkit-scrollbar-thumb{
     cursor: pointer;
 }
 .header .header-1 .form-box label:hover{
-    color: var(--#E5F6DF);
+    color: var(--#ECBADB);
 }
 
 .header .header-1 .icons div {
@@ -115,7 +115,7 @@ html::-webkit-scrollbar-thumb{
 
 }
 .header .header-1 .icons div:hover{
-    color: var(--#E5F6DF);
+    color: var(--#ECBADB);
 
 }
 
@@ -222,7 +222,7 @@ html::-webkit-scrollbar-thumb{
 .home{
     display: flex;
     align-items: center;
-    background:#E5F6DF; 
+    background:#ECBADB; 
     background-position: center;
     background-size: cover;
     min-height: 120vh;
@@ -339,7 +339,6 @@ font-size: 6rem;
     top:0; left:0; right:0;
     z-index: 1000;
 }
-
 
 
 

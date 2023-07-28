@@ -92,12 +92,10 @@ const getAdminLogin=async(req,res)=>{
     // Server-side code
 
 
-const statusChange= async (req, res) => {
-  res.send("hello")
-} 
+
   module.exports={
     getAdminLogin,getAminDashboard,
     postAdmin,getProduct,deleteProduct,
-    getOrder,statusChange
+    getOrder,
   }
   

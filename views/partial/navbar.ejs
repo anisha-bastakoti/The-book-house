@@ -1,28 +1,25 @@
 <div class="header-2">
     <div class="navbar">
-    <a href="/">home</a>
-    <a href="categories">categories</a>
-    <a href="/contact">contact</a>
-   
-    
-
-    </div>
-    <div  style="float:right !important;">
+    <a href="/">Home</a>
+    <a href="aboutus">Aboutus</a>
+    <a href="/contact">Contact</a>
+    <a href="/services">Services</a>  
     <% if (userDetail!==undefined){ %>
       <a href="/myprofile"> <%= userDetail.name %> </a> 
-
+      <a href="/products">Products</a>
       <a href="/logout"> Logout </a> 
     <% } else { %>
       <a href="./login">login</a>
       <% } %>
+    </div>
 
 
 
    
     
-  </div>
 </div>
  </header>
+
 <!-- header section ends-->
 <!-- bottom navbar start -->
 <div class="bottom-navbar">
