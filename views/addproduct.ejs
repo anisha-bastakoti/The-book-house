@@ -1,63 +1,133 @@
-<%- include('./partial/meta'); %>
-<%- include('./partial/css') %>
-        <body>
-            <div class="container">
-                <h1 class="mt-4 mb-4">Add Product</h1>
-                <form action="/addproduct" method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" name="name" id="name" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="pdescription">Product Description:</label>
-                        <textarea class="form-control" name="pdescription" id="pdescription" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Category:</label>
-                        <select id="category" name="category"></select>
-                        <select class="form-control" name="category" id="category" required>
-                            <option value="">Select a category</option>
-                            <option value="Spiritual">Spiritual</option>
-                            <option value="Frictional">Frictional</option>
-                            <option value="Nonfrictional">Nonfrictional</option>
-                            <option value="TextBook">TextBook</option>
-                            <option value="Notebook">Notebook</option>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Product Form</title>
+  <style>
+    /* AddProduct Form Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: wheat;
+      margin: 0;
+      padding: 0;
+    }
 
-                            <!-- Add more options as needed -->
-                        </select>
-                   
-                    <div class="form-group">
-                        <label for="location">Location:</label>
-                        <input type="text" class="form-control" name="location" id="location" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="author">Author:</label>
-                        <input type="text" class="form-control" name="author" id="author" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="delivery">Delivery:</label>
-                        <input type="text" class="form-control" name="delivery" id="delivery" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="price">Price:</label>
-                        <input type="number" class="form-control" name="price" id="price" required>
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="expiredate">Expiration Date:</label>
-                        <input type="date" class="form-control" name="expiredate" id="expiredate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="image">Image:</label>
-                        <input type="file" class="form-control-file" name="image" id="image" required>
-                    </div>
-        
-                    <input type="submit" class="btn btn-primary" value="Add Product">
-                </form>
-            </div>
-        </body>
-    
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: pink;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    select {
+      width: 100%;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-4 mb-4">Add Product</h1>
+    <form action="/addproduct" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" name="name" id="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="pdescription">Product Description:</label>
+        <textarea class="form-control" name="pdescription" id="pdescription" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select class="form-control" name="category" id="category" required>
+          <option value="">Select a category</option>
+          <option value="Spiritual">Spiritual</option>
+          <option value="Frictional">Frictional</option>
+          <option value="Nonfrictional">Nonfrictional</option>
+          <option value="TextBook">TextBook</option>
+          <option value="Notebook">Notebook</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" class="form-control" name="location" id="location" required>
+      </div>
+
+      <div class="form-group">
+        <label for="author">Author:</label>
+        <input type="text" class="form-control" name="author" id="author" required>
+      </div>
+
+      <div class="form-group">
+        <label for="delivery">Delivery:</label>
+        <input type="text" class="form-control" name="delivery" id="delivery" required>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" class="form-control" name="price" id="price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="expiredate">Expiration Date:</label>
+        <input type="date" class="form-control" name="expiredate" id="expiredate" required>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control-file" name="image" id="image" required>
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Add Product">
+    </form>
+  </div>
+</body>
+</html>

@@ -54,17 +54,36 @@
     </section>
   </div>
   <style>
+    
+    /* Add some basic styling for buttons */
     .btn {
-        color: #fff;
-        background-color: #ECBADB;
-        border-color: #ECBADB;
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: pink;
+      border: none;
+      border-radius: 4px;
+      color: black;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
     }
 
-    .btn:hover {
-        background-color: #ECBADB;
-        border-color: #ECBADB;
+    /* Style for the "Edit" button */
+    .btn-edit {
+      background-color: pink;
     }
-</style>
+
+    /* Style for the "Delete" button */
+    .btn-delete {
+      background-color: #dc3545;
+    }
+
+    /* Optional: Add some margin between the buttons */
+    form {
+      margin-bottom: 10px;
+    }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

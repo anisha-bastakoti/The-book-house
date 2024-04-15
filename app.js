@@ -46,7 +46,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: {
-      maxAge: 1300 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
+      maxAge: 3600 * 60 * 60 * 1000, // Set the session cookie's expiration time (e.g., 24 hours)
     },
   })
 );

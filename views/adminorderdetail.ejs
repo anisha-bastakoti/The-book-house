@@ -18,7 +18,7 @@
           <th scope="col">Product Name</th>
           <th scope="col">Product Qty</th>
           <th scope="col">Total Price</th>
-          <th scope="col">Status</th>
+          
         </tr>
       </thead>
       <tbody>
@@ -48,15 +48,7 @@
             <%= total.toFixed(2) %>
           </td>
           <td>
-            <form action="/admin/orders/<%= order._id %>/status" method="POST">
-              <select name="status">
-                <option value="pending" <% if (order.status === 'pending') { %>selected<% } %>>Pending</option>
-                <option value="shipped" <% if (order.status === 'shipped') { %>selected<% } %>>Shipped</option>
-                <option value="delivered" <% if (order.status === 'delivered') { %>selected<% } %>>Delivered</option>
-                <!-- Add more status options as needed -->
-              </select>
-              <button type="submit">Update</button>
-            </form>
+          
           </td>
         </tr>
         <% }); %>
