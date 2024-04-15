@@ -20,8 +20,8 @@ const getAllProducts = async (req, res) => {
     "Spiritual",
     "Frictional",
     "Nonfrictional",
-    "Textbook",
-    "Notebook",
+    "TextBook",
+    "NoteBook",
   ];
   const searchQuery = req.query.keyword;
   let query = {};
@@ -34,13 +34,16 @@ const getAllProducts = async (req, res) => {
       ],
     };
   }
+  console.log("Search Query:", searchQuery);
+  console.log("Query:", query);
+  const product = await Product.find(query);
 
   res.render("products", {
     data: products,
     productCount,
     resultPerPage,
     category: categories,
-    match: searchQuery,
+    data: product,
   });
 };
 // end of getAllProducts

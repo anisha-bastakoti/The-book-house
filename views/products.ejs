@@ -17,7 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
       <form class="form-inline my-2 my-lg-0">
-       <form action="/products?keyword=<%=match%>" method="GET">
+       <form action="/products?keyword<%=data%>" method="GET">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -34,8 +34,8 @@
           <option value="Spiritual">Spiritual</option>
           <option value="Frictional">Frictional</option>
           <option value="Nonfrictional">Nonfrictional</option>
-          <option value="Textbook">Textbook</option>
-          <option value="Notebook">Notebook</option>
+          <option value="TextBook">Textbook</option>
+          <option value="NoteBook">Notebook</option>
           <!-- Add more options as needed -->
         </select>
       <li class="nav-item active">
@@ -51,6 +51,9 @@
       <li class="nav-item active">
           <a class="nav-link " href="/myprofile ">MyProfile</a>
         </li>
+        <li class="nav-item active">
+          <a class="nav-link " href="/selleraccount ">Selleraccount</a>
+        </li>
       
       <li class="nav-item active">
         <a class="nav-link " href="/logout">Logout</a>
@@ -63,7 +66,10 @@
   <section style="background-color: #eee;">
     <div class="container py-5">
       <div class="row">
-        <% data.forEach(product => { %>
+        <% if (data.length === 0) { %>
+          <p>No products found for the search query.</p>
+        <% } else { %>
+          <% data.forEach(product => { %>
         <div class="col-md-12 col-lg-4 mb-4 mb-lg-0">
           <div class="card">
             <div class="d-flex justify-content-between p-3">
@@ -95,6 +101,7 @@
           </div>
         </div>
         <% }) %>
+        <%}%>
       </div>
       <!-- search product-->
 
